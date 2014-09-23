@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block requirejs %}
+  require('registration');
+{% endblock requirejs %}
+
+
+{% block content %}
+<section class="section-signin-page">
+  <div class="container">
+    <div class="sign-in-holder">
+      <div class="row">
+        <div class="col-xs-12 col-sm-6">
+          <form class="form-login" action="{% url 'authentication:registration' %}" method="POST">
+            {% csrf_token %}
+            <h3>Регистрация</h3>
+            <p>
+              Введите пожалуйста свои регистрационные данные.
+            </p>
+            <input name="first_name" class="md-input col-xs-12" {% if first_name %}style="border-color: red;" {% endif %} value="{{ form.data.first_name }}" placeholder="ФИО" required="required">
+            <input id="js-email" type="email" name="username" class="md-input col-xs-12" {% if username %}style="border-color: red;" {% endif %} value="{{ form.data.username }}" placeholder="email" required="required">
+            <input id="js-phone" name="phone" class="md-input col-xs-12" {% if phone %}style="border-color: red;" {% endif %} value="{{ form.data.phone }}" placeholder="Номер телефона" required="required">
+            <input name="company_name" class="md-input col-xs-12" {% if company_name %}style="border-color: red;" {% endif %} value="{{ form.data.company_name }}" placeholder="Название компании" required="required">
+            <input name="city" class="md-input col-xs-12" {% if city %}style="border-color: red;" {% endif %} value="{{ form.data.city }}" placeholder="Город">
+            <input type="password" name="password" class="md-input col-xs-12" {% if password %}style="border-color: red;" {% endif %} value="{{ form.data.password }}" placeholder="Пароль">
+            <input type="password" name="password" class="md-input col-xs-12" {% if password %}style="border-color: red;" {% endif %} value="{{ form.data.password }}" placeholder="Повторите пароль">
+            <button class="md-button narrow" type="submit">Зарегистрироваться</button>
+          </form>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <form class="form-guest-checkout">
+            <h3>Оптовым покупателям</h3>
+              <p class="description">Компания Erofei Markov Jewelry рада сотрудничеству с новыми партнерами. Мы готовы предложить вам наиболее выгодные условия оптовой закупки ювелирных изделий:</p>
+                <ul>
+                  <li>Выгодные цены и гибкая система скидок в зависимости от объема заказа</li>
+                  <li>Индивидуальный подход, консультации специалистов компании</li>
+                  <li>Выгодные цены и гибкая система скидок в зависимости от объема заказа</li>
+                  <li>Индивидуальный подход, консультации специалистов компании</li>
+                  <li>Сотрудничество на долговременной основе</li>
+                  <li>Постоянно обновляемый ассортимент ювелирных изделий из золота</li>
+                  <li>Доставка товара по России и СНГ сертифицированной курьерской службой</li>
+                </ul>
+              <p class="description">Для того, чтобы увидеть оптовые цены ювелирных изделий, представленных на сайте, пожалуйста, зарегистрируйтесь. После регистрации вам сразу же будут доступны актуальные цены для оптовых покупателей. При необходимости с вами свяжется менеджер нашей кампании и ответит на все интересующие вас вопросы.
+              </p>
+            <br>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

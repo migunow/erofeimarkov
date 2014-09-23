@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block requirejs %}
+  require('order');
+{% endblock requirejs %}
+
+
+{% block content %}
+<section class="section-shopping-cart-page">
+  <div class="container">
+    <div class="col-md-12 col-lg-9">
+      <div class="items-holder">
+        {% for cart_item in cart %}
+          <div class="cart-item row" data-id="{{ cart_item.cart_item.id }}">
+            <div class="col-sm-2">
+              <div class="image">
+                <img width="60" height="60" alt="" src="{{ cart_item.cart_item.product.get_60x60_preview }}">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="title">
+                {% autoescape off %}
+                  <a href="{{ cart_item.cart_item.product.get_absolute_url }}">{{ cart_item.get_full_name }}</a>
+                {% endautoescape %}
+              </div>
+            </div>
+            <div class="col-sm-2">
+              {% if cart_item.cart_item.product.type.sizes %}
+              <div class="quantity">
+                <select class="md-select quantity js-change-size" data-product-id="{{ cart_item.cart_item.product.id }}">
+                  {% for size in cart_item.cart_item.product.itemsizes_set.all %}
+                    <option value="{{ size.size }}" {% if size.size == cart_item.cart_item.size %}selected{% endif %}>{{ size.size }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col-sm-2">
+              <div class="quantity">
+                <select class="md-select quantity js-change-quantity" data-product-id="{{ cart_item.cart_item.product.id }}">
+                  {% for x in range %}
+                    <option value="{{ x }}" {% if x == cart_item.cart_item.quantity %}selected{% endif %}>{{ x }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-1">
+              <div class="unit-price">
+                {{ cart_item.price }} руб.
+              </div>
+            </div>
+            <div class="col-sm-1">
+              <a class="close-btn js-delete-from-cart" data-id="{{ cart_item.cart_item.id }}" href="#close"></a>
+            </div>
+          </div>
+        {% endfor %}
+
+      </div>
+    </div>
+
+    <div class="col-md-12 col-lg-3">
+      <div class="right-sidebar">
+        <div class="widget shopping-cart-summary">
+          <h4 class="md-bordered-title">ваш заказ</h4>
+          <form action="{% url 'order:order_checkout' %}" method="POST">
+            {% csrf_token %}
+            <fieldset>
+              <label class="col-xs-6">Ваши покупки</label>
+              <span class="col-xs-6 value">{{ cart.total }} руб.</span>
+            </fieldset>
+            <fieldset>
+              <label class="col-xs-6">доставка</label>
+              <span class="col-xs-6 value">бесплатно</span>
+            </fieldset>
+            <hr>
+            <fieldset>
+              <label class="col-xs-6">Итого:</label>
+              <span class="col-xs-6 value">{{ cart.total }} руб.</span>
+            </fieldset>
+            <p>Информация для доставки</p>
+            <input type="hidden" value="{{ cart.cart.id }}"/>
+            <input name="name" class="md-input col-xs-12" type="text" placeholder="Имя" style="margin-top: 10px;" required="required">
+            <input id="js-phone" name="phone" class="md-input col-xs-12" type="text" placeholder="Телефон" style="margin-top: 10px;" required="required">
+            <input name="address" class="md-input col-xs-12" type="text" placeholder="Адрес" style="margin-top: 10px;">
+            <input name="comment" class="md-input col-xs-12" type="text" placeholder="Пожелания" style="margin-top: 10px;">
+            <button type="submit" class="md-button large col-xs-12" style="margin-top: 10px;">Заказать</button>
+          </form>
+          <a href="{% url 'catalog:catalog' %}">Продолжить покупки</a>
+        </div>
+{#        <div class="widget coupon-widget">#}
+{#          <h4 class="md-bordered-title">use coupon code</h4>#}
+{#          <form>#}
+{#            <p>If you have your promotional coupon code, just rewrite it to form and apply.</p>#}
+{#            <input class="md-input col-xs-12" type="text" placeholder="enter coupon code">#}
+{#            <button class="md-button small" type="submit">apply</button>#}
+{#          </form>#}
+{#        </div>#}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

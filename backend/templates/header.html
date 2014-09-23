@@ -1,0 +1,91 @@
+{% load static from staticfiles %}
+<header>
+{#  <div class="lang-bar">#}
+{#    <div class="container">#}
+{#      <div class="col-xs-6">#}
+{#        <ul class="inline">#}
+{#          <li class="active">#}
+{#            <a href="#">eng</a>#}
+{#          </li>#}
+{#          <li>#}
+{#            <a href="#">de</a>#}
+{#          </li>#}
+{#          <li>#}
+{#            <a href="#">pl</a>#}
+{#          </li>#}
+{#        </ul>#}
+{#      </div>#}
+{#      <div class="col-xs-6 text-right">#}
+{#        <ul class="inline">#}
+{#          <li class="active">#}
+{#            <a href="#">us</a>#}
+{#          </li>#}
+{#          <li>#}
+{#            <a href="#">eur</a>#}
+{#          </li>#}
+{#          <li>#}
+{#            <a href="#">pln</a>#}
+{#          </li>#}
+{#        </ul>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+  <div class=" container">
+    <section class="style-one-header top-area">
+      <div class="row">
+        <div class="col-sm-4 col-xs-12">
+          <div class="login-menu-holder ic-sm-user">
+            Добро пожаловать!
+{#            <a href="signin.html"> войти</a> или#}
+{#            <a href="signin.html"> зарегистрироваться</a>#}
+          </div>
+          <div class="hotline-holder ic-sm-phone">
+            <label>Тел.:</label>
+            <span>8(800) 505-25-17</span>
+          </div>
+        </div>
+        <div class="top-logo-holder col-sm-4 col-xs-12">
+          <div class="top-logo">
+            <a href="{% url 'pages:about' %}">
+              <img alt="LOGO" src="{% static 'images/logo.png' %}"/>
+            </a>
+          </div>
+        </div>
+        <div class="col-sm-4 col-xs-12">
+          {% include 'cart/cart.html' %}
+        </div>
+      </div>
+    </section>
+    <div class="top-menu visible-md visible-lg">
+      <ul>
+        <li class="mega-menu">
+          <a href="{% url 'catalog:catalog' %}" class="js-menu" data-category="catalog">ЮВЕЛИРНЫЙ КАТАЛОГ</a>
+        </li>
+<!--
+        <li>
+          <a href="{% url 'pages:delivery' %}" class="js-menu" data-category="delivery">ДОСТАВКА</a>
+        </li>
+        <li>
+          <a href="{% url 'pages:news' %}" class="js-menu" data-category="news">НОВОСТИ</a>
+        </li>
+        <li>
+-->
+          <a href="{% url 'pages:delivery' %}" class="js-menu" data-category="news">ОПЛАТА И ДОСТАВКА</a>
+        </li>
+        <li>
+          <a href="{% url 'pages:about' %}" class="js-menu" data-category="about">О КОМПАНИИ</a>
+        </li>
+        {% if not request.user.is_authenticated %}
+        <li>
+          <a href="{% url 'authentication:login' %}" class="js-menu" data-category="login">ВХОД</a>
+        </li>
+        {% else %}
+        <li>
+          <a href="{% url 'authentication:logout' %}">ВЫХОД</a>
+        </li>
+        {% endif %}
+
+      </ul>
+    </div>
+  </div>
+</header>

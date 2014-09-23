@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="section-signin-page">
+  <div class="container">
+    <div class="sign-in-holder sign-in-holder1">
+      <div class="row">
+        <div class="col-xs-12 col-sm-6">
+          <form class="form-login" action="{% url 'authentication:restore' %}" method="POST">
+            {% csrf_token %}
+            <h3>Добро пожаловать!</h3>
+            <input name="email" class="md-input col-xs-12" placeholder="e-mail">
+            {% if error_message %}
+              <p style="color: red;">{{ error_message }}</p>
+            {% endif %}
+            <button class="md-button narrow " type="submit">Выслать на почту</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,39 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <title>Erofei Markov Jewelry{% block extra_title %}{% endblock %}</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Josefin+Sans:100,300,400,700' rel='stylesheet' type='text/css'>
+  <link href="{% static 'stylesheets/style.css' %}" rel="stylesheet">
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  {% csrf_token %}
+  <div class="wrapper">
+    {% block header %}
+      {% include 'header.html' %}
+    {% endblock header %}
+    {% block content %}{% endblock content %}
+    {% block footer %}
+      {% include 'footer.html' %}
+    {% endblock footer %}
+  </div>
+  <script src="{% static 'javascripts/vendor.js' %}"></script>
+  <script src="{% static 'javascripts/app.js' %}"></script>
+  <script>
+    $(function() {
+      require('utils/csrf');
+      require('cart');
+      require('menu_highlight');
+      {% block requirejs %}{% endblock requirejs %}
+    });
+  </script>
+</body>
+</html>

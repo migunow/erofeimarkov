@@ -1,0 +1,25 @@
+<h4>Номер заказа: {{orderno}}</h4>
+<h5>Время заказа: {{orderdt}}</h5>
+<h5>Комментарий: {{ comment }}</h5>
+<h5>Ценообразование: {{ ordercart.get_user_role }}</h5>
+
+<table class="table table-striped">
+<thead>
+  <tr>
+    <th>Артикул</th>
+    <th>Количество</th>
+    <th>Размер</th>
+    <th>Цена</th>
+    <th>Стоимость</th>
+  </tr>
+</thead>
+{% for item in ordercart %}
+  <tr>
+    <td>{{item.cart_item.product.article}}</td>
+    <td>{{item.cart_item.quantity}}</td>
+    <td>{% if item.cart_item.size %}{{item.cart_item.size}}{% else %}&nbsp;-&nbsp;{%endif%}</td>
+    <td>{{item.price}} руб.</td>
+    <td>{{item.total}} руб.</td>
+  </tr>
+{% endfor %}
+</table>

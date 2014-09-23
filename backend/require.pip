@@ -1,0 +1,6 @@
+Django>=1.6,<=1.6.99
+Pillow
+South
+django-mymigrate
+psycopg2
+pytils

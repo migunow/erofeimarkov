@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="section-signin-page">
+  <div class="container">
+    <div class="sign-in-holder">
+      <div class="row">
+        <div class="col-xs-12 col-sm-6">
+          <form class="form-login" action="{% url 'authentication:login' %}" method="POST">
+            {% csrf_token %}
+            <h3>Добро пожаловать!</h3>
+            <p>
+              Если вы еще не зарегистрированы, то можете сделать это <a href="{% url 'authentication:registration' %}" style="color: green;">здесь</a>.
+            </p>
+            <input name="email" class="md-input col-xs-12" placeholder="e-mail">
+            <input type="password" name="password" class="md-input col-xs-12" placeholder="пароль">
+            <a class="forget-link" href="{% url 'authentication:restore' %}">Забыли пароль?</a>
+            {% if error_message %}
+              <a class="forget-link">{{ error_message }}</a>
+            {% endif %}
+            <button class="md-button narrow " type="submit">Войти</button>
+          </form>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <form class="form-guest-checkout">
+            <h3>Гостевой аккаунт</h3>
+            <p>
+              Вы можете сделать свой заказ и без регистрации.
+            </p>
+            <br>
+            <a href="{% url 'catalog:catalog' %}">
+              <button class="md-button narrow" type="button">продолжить как гость</button>
+            </a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

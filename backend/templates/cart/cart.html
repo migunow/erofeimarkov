@@ -1,0 +1,41 @@
+<div class="wish-cart-holder">
+{#  <div class="wishlist-holder ic-sm-heart">#}
+{#    wishlist:#}
+{#    <span>2</span>#}
+{#  </div>#}
+  <div class="top-cart-holder ic-sm-basket" style="margin-left: 55px;">
+    Корзина:
+    <span class="top-cart-price">{{ cart.total }} p.</span>
+    <div class="total-buble">
+      <span>{{ cart.cart.item_set.all|length }}</span>
+    </div>
+    {% if cart.is_empty %}
+      <div class="hover-holder">
+        <ul class="basket-items ">
+          {% for cart_item in cart %}
+            <li class="row">
+              <div class="thumb col-xs-3">
+                <img width="45" height="45" alt="" src="{{ cart_item.cart_item.product.get_60x60_preview }}" />
+              </div>
+              <div class="body col-xs-9">
+                <a href="{{ cart_item.cart_item.product.get_absolute_url }}">
+                  <h5>{{ cart_item.cart_item.product.article }}</h5>
+                  <div class="price">
+                    <span>{{ cart_item.cart_item.quantity }} x {{ cart_item.price }} руб.</span>
+                  </div>
+                </a>
+                <a class="remove-item js-delete-from-cart" data-id="{{ cart_item.cart_item.id }}" href="#close">x</a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+        <a class="top-chk-out md-button" href="{% url 'cart:order' %}">Купить</a>
+      </div>
+    {% endif %}
+  </div>
+  <div class="search-holder">
+    <form id="js-search-from-cart-submit">
+      <input id="js-search-from-cart" type="text" value="{{ search_text }}" placeholder="Поиск по артикулу">
+    </form>
+  </div>
+</div>

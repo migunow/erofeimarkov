@@ -1,0 +1,17 @@
+.item-availability .item-availability-variant {
+	display: none;
+	font-weight: bold;
+}
+
+.item-availability.available .item-availability-variant.item-availability-available {
+	color: #34a994;
+	display: block;
+}
+
+.item-availability.no-size-available .item-availability-variant.item-availability-no-size-available {
+	display: block;
+}
+
+.item-availability.not-available .item-availability-variant.item-availability-not-available {
+	display: block;
+}
