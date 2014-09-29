@@ -184,10 +184,9 @@
                   <p>Категория: {{ product.item.category.name }}</p>
                   <p>Вид изделия: {{ product.item.type.name }}</p>
                   {% if product.item.iteminsertions.all %}
-                    <p>Вставки:</p>
                     {% for insertion in product.item.iteminsertions.all %}
                       <br/>
-                      <p>Вид: {{ insertion.kind.name }}</p>
+                      <p>Вставка: {{ insertion.kind.name }}</p>
                       <p>Количество: {{ insertion.count }} шт.</p>
                       <p>Вес: {{ insertion.weight }}</p>
                     {% endfor %}
