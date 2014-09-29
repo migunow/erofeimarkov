@@ -76,6 +76,7 @@ class ItemFields(models.Model):
 
 
 class Item(ItemFields):
+    name = models.CharField(max_length=100, verbose_name='Название', blank=True, null=True)
     article = models.CharField(max_length=50, verbose_name='Артикул', unique=True, db_index=True)
     category = models.ForeignKey(ItemCategory, verbose_name='Категория')
     type = models.ForeignKey(ItemType, verbose_name='Тип')
@@ -95,7 +96,7 @@ class Item(ItemFields):
         return self.article
 
     def get_full_name(self):
-        return '{} <br> <span style="font-size:22px;">арт. {}</span>'.format(self.category.name, self.article)
+        return '{} <br> <span style="font-size:22px;">арт. {}</span>'.format(self.name or self.category.name, self.article)
 
     def get_absolute_url(self):
         return reverse('catalog:item', kwargs={'item_id': str(self.id)})

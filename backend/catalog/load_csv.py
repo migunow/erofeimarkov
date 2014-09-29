@@ -79,6 +79,7 @@ def load_csv(filename):
                     balance = parse_to_int(row[8].split(',')[0])
                 else:
                     balance = 0
+                item_name = row[11]
                 raw_insetion = row[10]
                 try:
                     item = Item.objects.get(article=article)
@@ -92,6 +93,7 @@ def load_csv(filename):
                 item.price_wholesale = price_wholesale
                 item.price_primary_wholesale = price_primary_wholesale
                 item.balance = balance
+                item.name = item_name
                 item.save()
 
                 #удаляем все вставки
