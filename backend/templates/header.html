@@ -37,6 +37,9 @@
           <a href="{% url 'pages:delivery' %}" class="js-menu" data-category="news">ОПЛАТА И ДОСТАВКА</a>
         </li>
         <li>
+          <a href="{% url 'pages:contacts' %}" class="js-menu" data-category="contacts">КОНТАКТЫ</a>
+        </li>
+        <li>
           <a href="{% url 'pages:about' %}" class="js-menu" data-category="about">О КОМПАНИИ</a>
         </li>
         {% if not request.user.is_authenticated %}
