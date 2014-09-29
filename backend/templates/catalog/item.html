@@ -163,8 +163,12 @@
       <div class="tabbable tabs-left">
         <div class="row">
           <div class="col-xs-12 col-sm-3 no-margin">
-            <ul class="nav nav-tabs ">
-              <li class="active"><a href="#description" data-toggle="tab">Характеристики</a>
+            <ul class="nav nav-tabs " id="item-bottom-tabs">
+              <li class="active"><a href="#description" role="tab" data-toggle="tab">Характеристики</a>
+              </li>
+              <li class=""><a href="#delivery" role="tab" data-toggle="tab">Оплата и доставка</a>
+              </li>
+              <li class=""><a href="#quality-assurance" role="tab" data-toggle="tab">Гарантия качества</a>
               </li>
             </ul>
           </div>
@@ -188,6 +192,27 @@
                       <p>Вес: {{ insertion.weight }}</p>
                     {% endfor %}
                   {% endif %}
+                </div>
+              </div>
+              <div class="tab-pane" id="delivery">
+                <div class="additional-info">
+                  <h4>Доставка и оплата</h4>
+                  <hr>
+                  <p>
+                    Компания Erofei Markov поставляет ювелирные изделия не только по России, но и в страны СНГ. Мы рады предложить вам бесплатную доставку вашего заказа независимо от его суммы!
+                  </p>
+                  <p>
+                    Доставку заказов осуществляет курьерская служба СПСР, имеющая сертификат на доставку ювелирных изделий. После сверки паспортных данных и проверки товара вы оплачиваете заказ наличными курьеру.
+                  </p>
+                </div>
+              </div>
+              <div class="tab-pane" id="quality-assurance">
+                <div class="additional-info">
+                  <h4>Гарантия качества</h4>
+                  <hr>
+                  <p>
+                    Ювелирные украшения, представленные в каталоге Erofei Markov Jewelry, соответствуют государственным стандартам качества. Все изделия проходят обязательную проверку, что подтверждает клеймо государственной пробирной инспекции, которое поставлено на каждом ювелирном изделии. Товары, купленные в нашем интернет-магазине, комплектуются заводской биркой с информацией о весе изделия, вставках и компании-производителе. С нами вы можете быть уверены в том, что получите качественное ювелирное изделие из золота, которое прослужит вам долгие годы!
+                  </p>
                 </div>
               </div>
             </div>
