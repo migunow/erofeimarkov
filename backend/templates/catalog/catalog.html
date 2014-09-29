@@ -150,19 +150,10 @@
             {% endif %}
             <div class=" col-lg-4 col-xs-12 product-holder">
               <div class="product-item text-center">
-                <a href="#next" class="mini-next"></a>
-                <a href="#prev" class="mini-prev"></a>
                 <div class="image ">
-                  <div class="product-mini-gallery">
                     <img alt="" src="{{ product.item.get_212x281_preview }}" width="212" height="281" />
-                    <img alt="" src="{{ product.item.get_212x281_preview }}" width="212" height="281" />
-                    <img alt="" src="{{ product.item.get_212x281_preview }}" width="212" height="281" />
-                  </div>
                 </div>
                 <hr>
-                <div class="brand">
-{#                  <img alt="" src="images/brand-small03.png" />#}
-                </div>
                 <div class="title uppercase bold">
                   {% autoescape off %}
                     <a href="{{ product.item.get_absolute_url }}">{{ product.item.get_full_name }}</a>

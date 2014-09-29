@@ -36,7 +36,7 @@ class Filter
     @prepare_query_string()
 
   make_query_str: (name, ids)=>
-    unless _.isEmpty(ids)
+    unless ids.length==0
       _ids = ids.join(',')
       return "#{name}=[#{_ids}]"
     else
@@ -92,7 +92,10 @@ class Filter
     insertions = @make_query_str('insertions', insertion_filters)
     types = @make_query_str('types', type_filters)
     query_items = [active_tab_filter, new_filter, categories, insertions, types, sorting, page, price_filter]
-    _.remove(query_items, (item)-> item == '')
+    query_items = query_items.filter((item) ->
+      item isnt ""
+    )
+
     query = '?' + query_items.join('&')
     if query == '?'
       query = ''

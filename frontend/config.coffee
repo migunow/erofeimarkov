@@ -9,7 +9,6 @@ exports.config =
       order:
         before: [
           'bower_components/jquery/dist/jquery.js'
-          'bower_components/jquery-migrate/jquery-migrate.js'
         ]
 
     stylesheets:
