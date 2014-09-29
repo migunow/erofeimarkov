@@ -1273,11 +1273,11 @@ margin:40px 0 0 0;
 }
 .no-move-down .product-holder{
 
- min-height:425px;
+ min-height:435px;
 }
 .ie .no-move-down .product-holder{
-    height:  500px!important;
-    min-height: 500px!important;
+    height:  510px!important;
+    min-height: 510px!important;
 }
 .product-grid.no-move-down .row {
 margin-bottom: 14px;
