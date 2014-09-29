@@ -14,3 +14,5 @@ exports.config =
 
     stylesheets:
       joinTo: '../../backend/static/stylesheets/style.css'
+
+  sourceMaps: false

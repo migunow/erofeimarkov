@@ -1,146 +1,57 @@
 <section class="section-footer">
-{#  <div class="footer-logo-holder">#}
-{#    <img src="images/logo-small.png" alt="Modello-Logo" />#}
-{#  </div>#}
   <div class="footer-holder">
     <div class="container">
-      <div class="col-xs-offset-4 col-xs-5 col-sm-6 col-md-3">
-        <div class="footer-column adress-column">
-          <h4>Связаться с нами</h4>
-          <div class="content">
-            <p class="bold">Ювелирная компания «Ерофей Марков»</p>
-            <p>
+      <div class="row">
+        <div class="col-xs-offset-4 col-xs-5 col-sm-6 col-md-3">
+          <div class="footer-column adress-column">
+            <h4>Связаться с нами</h4>
+            <div class="content">
+              <p class="bold">Ювелирная компания «Ерофей Марков»</p>
               <div>156022, г. Кострома, ул. Стопани, д. 42, оф. 11</div>
               <div>8 (800) 505-25-17</div>
               <div><a href="mailto:info@erofeimarkov.ru">info@erofeimarkov.ru</a></div>
-            </p>
-            <div class="footer-socials">
-              <ul>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-8 col-sm-6 col-md-3">
+          <div class="footer-column">
+            <h4>Поддержка</h4>
+            <div class="content">
+              <ul class="link-list">
                 <li>
-                  <a href="#" class="fa fa-facebook"></a>
+                  <a href="{% url 'pages:delivery' %}">Оплата и доставка</a>
                 </li>
                 <li>
-                  <a href="#" class="fa fa-twitter"></a>
-                </li>
-                <li>
-                  <a href="#" class="fa fa-dribbble "></a>
-                </li>
-                <li>
-                  <a href="#" class="fa fa-google-plus "></a>
+                  <a href="{% url 'pages:contacts' %}">Связаться с нами</a>
                 </li>
               </ul>
             </div>
           </div>
         </div>
       </div>
-{#      <div class="col-xs-offset-2 col-xs-8 col-sm-6 col-sm-offset-0  col-md-3">#}
-{#        <div class="footer-column">#}
-{#          <h4>holıday sales</h4>#}
-{#          <div class="content">#}
-{#            <ul class="footer-products">#}
-{#              <li class="row">#}
-{#                <div class="thumb col-xs-3">#}
-{#                  <a href="single-product.html">#}
-{#                    <img alt="" src="images/products/product02-sq.jpg" />#}
-{#                  </a>#}
-{#                </div>#}
-{#                <div class="body col-xs-9">#}
-{#                  <h5><a href="single-product.html">chanel - fashion bag</a></h5>#}
-{#                  <div class="price">#}
-{##}
-{#                    <span>$189.00</span>#}
-{#                  </div>#}
-{#                </div>#}
-{#              </li>#}
-{#              <li class="row">#}
-{#                <div class="thumb col-xs-3">#}
-{#                  <a href="single-product.html">#}
-{#                    <img alt="" src="images/products/product06-sq.jpg" />#}
-{#                  </a>#}
-{#                </div>#}
-{#                <div class="body col-xs-9">#}
-{#                  <h5><a href="single-product.html">calvin clane - slim pants</a></h5>#}
-{#                  <div class="price">#}
-{#                    <span class="previous-price">$220.00</span>#}
-{#                    <span>$189.00</span>#}
-{#                  </div>#}
-{#                </div>#}
-{#              </li>#}
-{#            </ul>#}
-{#          </div>#}
-{#        </div>#}
-{#      </div>#}
-{#      <div class="col-xs-offset-2 col-xs-8 col-sm-6 col-sm-offset-0  col-md-3">#}
-{#        <div class="footer-column">#}
-{#          <h4>new arrivals</h4>#}
-{#          <div class="content">#}
-{#            <ul class="footer-products">#}
-{#              <li class="row">#}
-{#                <div class="thumb col-xs-3">#}
-{#                  <a href="single-product.html">#}
-{#                    <img alt="" src="images/products/product05-sq.jpg" />#}
-{#                  </a>#}
-{#                </div>#}
-{#                <div class="body col-xs-9">#}
-{#                  <h5><a href="single-product.html">calvin clanes - low slim jeans</a></h5>#}
-{#                  <div class="price">#}
-{#                    <span class="previous-price">$220.00</span>#}
-{#                    <span>$189.00</span>#}
-{#                  </div>#}
-{#                </div>#}
-{#              </li>#}
-{#              <li class="row">#}
-{#                <div class="thumb col-xs-3">#}
-{#                  <a href="single-product.html">#}
-{#                    <img alt="" src="images/products/product04-sq.jpg" />#}
-{#                  </a>#}
-{#                </div>#}
-{#                <div class="body col-xs-9">#}
-{#                  <h5><a href="single-product.html">mc neal - gummi sweater</a></h5>#}
-{#                  <div class="price">#}
-{#                    <span class="previous-price">$220.00</span>#}
-{#                    <span>$189.00</span>#}
-{#                  </div>#}
-{#                </div>#}
-{#              </li>#}
-{#            </ul>#}
-{#          </div>#}
-{#        </div>#}
-{#      </div>#}
-      <div class="col-xs-8 col-sm-6 col-md-3">
-        <div class="footer-column">
-          <h4>Поддержка</h4>
-          <div class="content">
-            <ul class="link-list">
-              <li>
-                <a href="{% url 'pages:delivery' %}">Оплата и доставка</a>
-              </li>
-              <li>
-                <a href="{% url 'pages:contacts' %}">Связаться с нами</a>
-              </li>
-            </ul>
+      <div class="row">
+        <div class="col-xs-offset-4 col-xs-5 col-sm-9 col-md-5">
+          <div>
+            <script type="text/javascript">(function () {
+              if (window.pluso)if (typeof window.pluso.start == "function") return;
+              if (window.ifpluso == undefined) {
+                window.ifpluso = 1;
+                var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+                s.type = 'text/javascript';
+                s.charset = 'UTF-8';
+                s.async = true;
+                s.src = ('https:' == window.location.protocol ? 'https' : 'http') + '://share.pluso.ru/pluso-like.js';
+                var h = d[g]('body')[0];
+                h.appendChild(s);
+              }
+            })();</script>
+            <div class="pluso" data-background="transparent"
+                 data-options="big,square,line,horizontal,nocounter,theme=01"
+                 data-services="vkontakte,facebook,twitter,google,moimir,print,odnoklassniki"></div>
           </div>
         </div>
       </div>
     </div>
   </div>
-{#  <div class="footer-payment-icons">#}
-{#    <ul class="list-inline">#}
-{#      <li>#}
-{#        <img alt="paypal" src="images/payments-paypal.png" />#}
-{#      </li>#}
-{#      <li>#}
-{#        <img alt="visa" src="images/payments-visa.png" />#}
-{#      </li>#}
-{#      <li>#}
-{#        <img alt="master card" src="images/payments-mastercard.png" />#}
-{#      </li>#}
-{#      <li>#}
-{#        <img alt="discover" src="images/payments-discover.png" />#}
-{#      </li>#}
-{#      <li>#}
-{#        <img alt="skrill" src="images/payments-skrill.png" />#}
-{#      </li>#}
-{#    </ul>#}
-{#  </div>#}
 </section>

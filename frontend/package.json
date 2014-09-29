@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "javascript-brunch": "1.7.1",
-    "coffee-script-brunch": "1.8.0",
-    "css-brunch": "1.7.0"
+    "coffee-script-brunch": "1.8.1",
+    "uglify-js-brunch": "1.7.7",
+    "css-brunch": "1.7.0",
+    "clean-css-brunch": "1.7.1"
   }
 }
