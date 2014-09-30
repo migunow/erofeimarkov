@@ -77,16 +77,6 @@ $('.section-shopping-cart-page .cart-item .close-btn').click(function(event) {
 });
 
 
-//    Lightbox activator
-    
-if($('a[data-rel="prettyphoto"]').length>0){
-$('a[data-rel="prettyphoto"]').prettyPhoto();
-}
-
-
-
-
-
 //Color Options background color setters (radio buttons)
     if ($('.color-option').length > 0) {
         $('.color-option').each(function() {
