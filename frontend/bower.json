@@ -10,20 +10,10 @@
   ],
   "dependencies": {
       "jquery": "1.11.0",
-      "jquery-migrate": "1.2.1",
       "jquery-cookie": "1.4.1",
-      "lodash": "2.4.1",
-      "jquery.inputmask": "3.0.55",
-      "raty": "2.7.0"
+      "jquery.inputmask": "3.0.55"
   },
   "overrides": {
-      "jquery-migrate": {
-          "main": "jquery-migrate.js"
-      },
-      "raty": {
-          "main": [
-              "lib/jquery.raty.js"
-          ]
-      }
+      
   }
 }

@@ -2,11 +2,7 @@ var zoom = 16;
 
 
 $(window).bind("load", function() {
-    var timeout = setTimeout(function() {
-        $(".product-mini-gallery img").trigger("loadImagesNow");
-        $(".brands-slider img").trigger("loadImagesNow");
 
-    }, 1000);
 });
 
 
@@ -57,53 +53,6 @@ $('input,textarea').blur(function() {
         );
 
 
-
-
-//Mega Menu
-
-$('.mega-menu > a').hover(  
-    
-    function(){ 
-       
-       $('.top-menu .dropdown.open').removeClass('open');
-        
-    $(this).parent().addClass('active');
-   
-    $(this).parent().find('.mega-menu-holder').addClass('shown').fadeIn(0);
-    
-    
-    },
-            function(event){
-        trgt=$(event.relatedTarget);
-       
-                if(!trgt.hasClass('shown')){
-                   
-                      $(this).parent().find('.mega-menu-holder.shown').fadeOut(0).removeClass('shown');
-     $(this).parent().removeClass('active');
-                }
-                 
-          
-
-
-            
-            }
-  
-);
-    
-    
-
-
-$('.mega-menu-holder').mouseleave(function(event){
-   
- 
-
-    if($(this).hasClass('shown')){
-       $(this).fadeOut(0).removeClass('shown');
-     $(this).parent().removeClass('active');
-    }
-});
-
-
 //Top menu select (responsive mode) controller
 
 
@@ -128,134 +77,12 @@ $('.section-shopping-cart-page .cart-item .close-btn').click(function(event) {
 });
 
 
-//Mini Gallery Controller "in products"
-
-var miniGallerySliders = new Array();
-
-
-function checkMiniGalleries() {
-
-    indx = $('.tab-pane.active').attr('id');
-
-    if ($('.tab-pane.active .product-mini-gallery').length > 0) {
-        if (miniGallerySliders[indx] === undefined || miniGallerySliders[indx] === false) {
-
-            $('.tab-pane.active .product-mini-gallery').carouFredSel({
-                auto: false
-            });
-            miniGallerySliders[indx] = true;
-
-        }
-    }
-}
-
-    
-    
-    
-    
 //    Lightbox activator
     
 if($('a[data-rel="prettyphoto"]').length>0){
 $('a[data-rel="prettyphoto"]').prettyPhoto();
 }
 
-
-
-//SinglePage slide activator
-    if ($('.section-single-product-page').length > 0) {
-
-        var singlePSlider = $(".single-product-slider").carouFredSel({
-            auto: false,
-            items: 1
-        });
-
-          $(".single-product-gallery .next-btn").click(function(event) {
-            event.preventDefault();
-            $('.single-product-slider').trigger("next", 1);
-
-        });
-
-
-       $(".single-product-gallery .prev-btn").click(function(event) {
-            event.preventDefault();
-            $('.single-product-slider').trigger("prev", 1);
-
-        });
-
-        
-if($('.single-product-vertical-gallery').length>0){
-        $('.single-product-vertical-gallery ul').carouFredSel({
-            direction: 'up',
-            auto: false,
-            items: 4,
-            circular: true
-        });
-
-        $(".single-product-vertical-gallery .up-btn").click(function(event) {
-            event.preventDefault();
-            $('.single-product-vertical-gallery ul').trigger("next", 1);
-
-        });
-
-
-        $(".single-product-vertical-gallery .down-btn").click(function(event) {
-            event.preventDefault();
-            $('.single-product-vertical-gallery ul').trigger("prev", 1);
-
-        });
-
-
-        $(".single-product-vertical-gallery .vertical-gallery-item").click(function(event) {
-            event.preventDefault();
-            tid = $(this).attr('href');
-            targetSlide = $(".single-product-gallery-item" + tid);
-            console.log(targetSlide)
-            singlePSlider.trigger('slideTo', targetSlide);
-
-        });
-
-}
-        
-        
-        
-        
-        
-        
-//        Horizontal Single page gallery
-           
-if($('.single-product-horizontal-gallery').length>0){
-        $('.single-product-horizontal-gallery ul').carouFredSel({
-            
-            auto: false,
-         
-            circular: true
-        });
-
-        $(".single-product-horizontal-gallery .next-btn").click(function(event) {
-            event.preventDefault();
-            $('.single-product-horizontal-gallery ul').trigger("next", 1);
-
-        });
-
-
-        $(".single-product-horizontal-gallery .prev-btn").click(function(event) {
-            event.preventDefault();
-            $('.single-product-horizontal-gallery ul').trigger("prev", 1);
-
-        });
-
-
-        $(".single-product-horizontal-gallery .horizontal-gallery-item").click(function(event) {
-            event.preventDefault();
-            tid = $(this).attr('href');
-            targetSlide = $(".single-product-gallery-item" + tid);
-            console.log(targetSlide)
-            singlePSlider.trigger('slideTo', targetSlide);
-
-        });
-
-}
-    }
 
 
 
@@ -270,18 +97,6 @@ if($('.single-product-horizontal-gallery').length>0){
 
     }
 
-
-//Rating Star activator
-    if ($('.star').length > 0) {
-        $('.star').raty({
-            number: 1,
-            starOff: '/static/images/star-off.png',
-            starOn: '/static/images/star-on.png',
-            score: function() {
-                return $(this).attr('data-score');
-            }
-        });
-    }
 
 //Sidebar widget activator
     if ($('.accordion-widget').length > 0) {
@@ -305,55 +120,15 @@ if($('.single-product-horizontal-gallery').length>0){
 
 
 
-//Product mini gallery
-    if ($(".product-mini-gallery").length > 0) {
-
-        allminigalleries = $(".product-mini-gallery img").length;
-        $(".product-mini-gallery img").each(function(i) {
-
-            src = $(this).attr('src');
-            $(this).attr('data-original', src);
-            $(this).attr('src', "http://placehold.it/212x218/ffffff/dddddd/&text=Loading...");
-
-
-            if (i + 1 >= allminigalleries) {
-                checkMiniGalleries();
-
-            }
-        });
-        $(".product-mini-gallery img").lazyload({
-            event: "loadImagesNow",
-            effect: "fadeIn"
-        });
-    }
-
-
-
-    $(".product-mini-gallery").parent().parent().parent().find('.mini-prev').click(function(event) {
-        event.preventDefault();
-        $(this).parent().find('.product-mini-gallery').trigger("prev", 1);
-
-    });
-
-    $(".product-mini-gallery").parent().parent().parent().find('.mini-next').click(function(event) {
-        event.preventDefault();
-        $(this).parent().find('.product-mini-gallery').trigger("next", 1);
-
-    });
-
-   
-
-
-
 //Grid/list buttons switchers on product sidebar page
     if ($('.grid-list-buttons').length > 0) {
 
-        setTimeout(checkMiniGalleries, 200);
+        //setTimeout(checkMiniGalleries, 200);
     }
 
     $('.grid-list-buttons a').click(function(e) {
         e.preventDefault();
-        setTimeout(checkMiniGalleries, 200);
+        //setTimeout(checkMiniGalleries, 200);
 
     });
 
@@ -361,48 +136,7 @@ if($('.single-product-horizontal-gallery').length>0){
 
 //Brand Slider activator
 
-    if ($(".brands-slider").length > 0) {
-        $(".brands-slider img").lazyload({
-            event: "loadImagesNow",
-            effect: "fadeIn"
-        });
-    }
-
-    allBrandItems = $(".brands-slider img").length;
-    $(".brands-slider img").each(function(i) {
-
-        src = $(this).attr('src');
-        $(this).attr('data-original', src);
-        $(this).attr('src', "http://placehold.it/264x81/ffffff/333333/&text=Loading...");
-
-
-        if (i + 1 >= allBrandItems) {
-
-            startBrandsSlider();
-
-        }
-    });
-
- function startBrandsSlider() {
-        $('.section-brands-slider .brands-slider').carouFredSel({
-            auto: false
-        });
-
-
-        $(".section-brands-slider .brands-slider").parent().parent().find('.brands-next').click(function(event) {
-            event.preventDefault();
-            $(this).parent().find('.brands-slider').trigger("next", 1);
-
-        });
-
-        $(".section-brands-slider .brands-slider").parent().parent().find('.brands-prev').click(function(event) {
-            event.preventDefault();
-            $(this).parent().find('.brands-slider').trigger("prev", 1);
-
-        });
-
-    }
-
+    
 
 
 //Image lazy activator

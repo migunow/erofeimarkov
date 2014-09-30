@@ -18,24 +18,9 @@
         <div class="row">
           <div class="col-xs-11 col-sm-9">
             <div class="single-product-gallery">
-
-              <div class="nav-holder">
-                <a class="fa fa-angle-right next-btn" href="#next"></a>
-                <a class="fa fa-angle-left prev-btn" href="#prev"></a>
-              </div>
-
-              <div class="single-product-slider">
-                <div class="single-product-gallery-item" id="slide1">
                   <a data-rel="prettyphoto" href="{{ product.item.get_512x512_preview }}">
-                    <img class="lazy" alt="" src="{{ product.item.get_512x512_preview }}" height="512" width="512">
+                    <img class="lazy" alt="" src="{{ product.item.get_512x512_preview }}">
                   </a>
-                </div>
-                <div class="single-product-gallery-item" id="slide2">
-                  <a data-rel="prettyphoto" href="{{ product.item.get_512x512_preview }}">
-                    <img class="lazy" alt="" src="{{ product.item.get_512x512_preview }}" height="512" width="512">
-                  </a>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -232,13 +217,8 @@
         {% for alt_product in product.item.relatedItems.all %}
         <div class="product-holder small">
           <div class="product-item text-center">
-            <a href="#next" class="mini-next"></a>
-            <a href="#prev" class="mini-prev"></a>
             <div class="image ">
-              <div class="product-mini-gallery">
-                  <img alt="" src="{{ alt_product.get_512x512_preview }}" width="212" height="212">
-                  <img alt="" src="{{ alt_product.get_512x512_preview }}" width="212" height="212">
-              </div>
+              <img alt="" src="{{ alt_product.get_512x512_preview }}" width="212" height="212">
             </div>
             <hr>
             <div class="title uppercase bold">
