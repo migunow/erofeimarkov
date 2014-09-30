@@ -90,7 +90,7 @@ class Item(ItemFields):
     class Meta:
         verbose_name = 'Изделие'
         verbose_name_plural = 'Изделия'
-        ordering = ('-balance', 'sorting_order',)
+        ordering = ('sorting_order', '-balance',)
 
     def __unicode__(self):
         return self.article
