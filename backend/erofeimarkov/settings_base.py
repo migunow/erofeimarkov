@@ -16,7 +16,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['www.erofeymarkov.ru', 'www.erofeimarkov.ru', 'erofeimarkov.ru', 'erofeymarkov.ru', 'www.erofeimarkov.yorcc.ru', 'erofeimarkov.yorcc.ru']
+ALLOWED_HOSTS = ('www.erofeymarkov.ru', 'www.erofeimarkov.ru', 'erofeimarkov.ru', 'erofeymarkov.ru',)
 
 
 # Application definition
@@ -48,14 +48,11 @@ MIDDLEWARE_CLASSES = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
     "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
     "cart.middleware.cart",
+    "erofeimarkov.context_processors.debug",
 )
 
 ROOT_URLCONF = 'erofeimarkov.urls'

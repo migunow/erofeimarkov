@@ -16,6 +16,17 @@ DATABASES = {
     }
 }
 
+# MIDDLEWARE_CLASSES = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE_CLASSES
+
+# DEBUG_TOOLBAR_PATCH_SETTINGS = False
+# INTERNAL_IPS = '127.0.0.1'
+
+# CONFIG_DEFAULTS = {
+#     'RESULTS_STORE_SIZE': 5000,
+#     'PROFILER_MAX_DEPTH': 5000,
+#     'SQL_WARNING_THRESHOLD': 20000,
+# }
+
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_HOST_USER = 'noreply@erofeimarkov.ru'
 EMAIL_HOST_PASSWORD = '434390'

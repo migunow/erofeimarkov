@@ -76,7 +76,6 @@ class Filter
     else
       price_filter = ''
 
-    debugger
     #активная вкладка
     active_tab = $('.tab-pane.active').attr('id')
     if active_tab is 'grid-view'

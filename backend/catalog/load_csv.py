@@ -33,6 +33,7 @@ def load_csv(filename):
         spamreader = csv.reader(csvfile, delimiter=';'.encode('utf-8'))
 
         with transaction.atomic():
+            Item.objects.all().update(is_deleted=True)
             for count, row in enumerate(spamreader, start=1):
                 # print('строка {0}'.format(count))
                 if not row:
@@ -94,6 +95,7 @@ def load_csv(filename):
                 item.price_primary_wholesale = price_primary_wholesale
                 item.balance = balance
                 item.name = item_name
+                item.is_deleted = False
                 item.save()
 
                 #удаляем все вставки

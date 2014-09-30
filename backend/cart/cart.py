@@ -45,7 +45,6 @@ class CartItemService(ItemPriceCalculatorMixin):
 
 class CartService(object):
     def __init__(self, request):
-        print '------------'
         self.user = request.user
         cart_id = request.session.get(CART_ID)
         if cart_id:

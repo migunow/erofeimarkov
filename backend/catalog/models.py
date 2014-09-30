@@ -86,6 +86,7 @@ class Item(ItemFields):
     new = models.BooleanField(default=False, verbose_name='Новинка')
     balance = models.PositiveIntegerField('Остаток', default=0)
     sorting_order = models.PositiveIntegerField(default=500)
+    is_deleted = models.BooleanField('Удален из каталога',default=False)
 
     class Meta:
         verbose_name = 'Изделие'
