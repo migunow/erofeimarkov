@@ -217,13 +217,8 @@
         {% for alt_product in product.item.relatedItems.all %}
         <div class="product-holder small">
           <div class="product-item text-center">
-            <a href="#next" class="mini-next"></a>
-            <a href="#prev" class="mini-prev"></a>
             <div class="image ">
-              <div class="product-mini-gallery">
-                  <img alt="" src="{{ alt_product.get_512x512_preview }}" width="212" height="212">
-                  <img alt="" src="{{ alt_product.get_512x512_preview }}" width="212" height="212">
-              </div>
+              <img alt="" src="{{ alt_product.get_512x512_preview }}" width="212" height="212">
             </div>
             <hr>
             <div class="title uppercase bold">
