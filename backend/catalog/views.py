@@ -85,7 +85,7 @@ class CatalogView(View):
         if article_key:
             filters['article__icontains'] = article_key
 
-        query_set = Item.objects.filter(is_deleted=False, **filters)
+        query_set = Item.objects.filter(is_deleted=False, **filters).distinct()
         if ordering:
             query_set = query_set.order_by(ordering)
 
