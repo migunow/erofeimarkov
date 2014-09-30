@@ -2198,20 +2198,6 @@ letter-spacing:0px!important;
 letter-spacing:1px;
 }
 
-
-
-
-
-.star-holder .star{
-    display:inline-block;
-    min-width:100%;
-}
-.star{
-   
-}
-.star img {
-padding-right: 0px;
-}
 #list-view  .products-list-holder {
     margin:30px 0 0 0;
 }
