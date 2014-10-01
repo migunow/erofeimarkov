@@ -97,7 +97,7 @@ class Item(ItemFields):
         return self.article
 
     def get_full_name(self):
-        return '{} <br> <span style="font-size:22px;">арт. {}</span>'.format(self.name or self.category.name, self.article)
+        return '{} <br> <span style="font-size:15px;text-transform: none;">Арт. {}</span>'.format(self.name or self.category.name, self.article)
 
     def get_absolute_url(self):
         return reverse('catalog:item', kwargs={'item_id': str(self.id)})
