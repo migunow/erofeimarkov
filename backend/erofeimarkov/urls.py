@@ -9,7 +9,7 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^moscow-admin/', include(admin.site.urls)),
     url(r'^authentication/', include('authentication.urls', namespace='authentication')),
     url(r'^catalog/', include('catalog.urls', namespace='catalog')),
     url(r'^cart/', include('cart.urls', namespace='cart')),

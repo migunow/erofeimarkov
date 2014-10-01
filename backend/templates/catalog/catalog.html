@@ -151,7 +151,9 @@
             <div class=" col-lg-4 col-xs-12 product-holder">
               <div class="product-item text-center">
                 <div class="image ">
+                  <a href="{{ product.item.get_absolute_url }}">
                     <img alt="" src="{{ product.item.get_212x281_preview }}" width="212" height="281" />
+                  </a>
                 </div>
                 <hr>
                 <div class="title uppercase bold">
@@ -201,39 +203,26 @@
               <div class="row">
                 <div class="col-xs-12 col-sm-4">
                   <div class="image-holder">
-                    <img alt="" src="{{ product.item.get_212x281_preview }}" width="212" height="281" />
+                    <a href="{{ product.item.get_absolute_url }}">
+                      <img alt="" src="{{ product.item.get_212x281_preview }}" width="212" height="281" />
+                    </a>
                   </div>
                 </div>
                 <div class="col-xs-12 col-sm-8">
                   <div class="item-details-holder">
                     <div class="brand">
-{#                      <img src="images/brand-small01.png" alt="">#}
                     </div>
-                    <h2 class="title"><a href="{{ product.item.get_absolute_url }}">{{ product.item.type.name }}</a></h2>
-{#                    <div class="star-holder">#}
-{#                      <div class="star" data-score="3"></div>#}
-{#                    </div>#}
-                    <div class="excerpt">
-                      <p>
-                        {% autoescape off %}
-                          <a href="{{ product.item.get_absolute_url }}">{{ product.item.get_full_name }}</a>
-                        {% endautoescape %}
-                      </p>
+                    {% autoescape off %}
+                      <h2 class="title">
+                        <a href="{{ product.item.get_absolute_url }}">{{ product.item.get_full_name }}</a>
+                      </h2>
+                    {% endautoescape %}
+                    <div class="price">
+                      {% if product.has_sale %}
+                        <span class="previous-price">{{ product.price_retail }} руб.</span>
+                      {% endif %}
+                    <span>{{ product.price }} руб.</span>
                     </div>
-{#                    <div class="color-options">#}
-{#                      <div class="btn-group">#}
-{#                        <button type="button" class="color-option" data-color="#B73138"></button>#}
-{#                        <button type="button" class="color-option" data-color="#F2ECE0"></button>#}
-{#                        <button type="button" class="color-option" data-color="#2C333D"></button>#}
-{#                      </div>#}
-{#                    </div>#}
-
-          <div class="price">
-            {% if product.has_sale %}
-              <span class="previous-price">{{ product.price_retail }} руб.</span>
-            {% endif %}
-          <span>{{ product.price }} руб.</span>
-          </div>
                     <div class="buttons-holder">
                       <div class="add-cart-holder">
                         {% if product.item.id in cart_positions %}

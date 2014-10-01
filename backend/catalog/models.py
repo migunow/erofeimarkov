@@ -154,8 +154,6 @@ class Item(ItemFields):
         image.save(path_to_thumbnail, "JPEG", quality=100)
 
 
-
-
 class ItemSizes(ItemFields):
     """
     Существует только для колец. В зависимости от размера кольца разные цены, штрихкод и вес
