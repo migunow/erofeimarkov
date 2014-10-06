@@ -75,7 +75,7 @@ def load_csv(filename):
                     continue
                 price_retail = parse_to_int(row[5].split(',')[0])
                 price_wholesale = parse_to_int(row[6].split(',')[0])
-                price_primary_wholesale = parse_to_int(row[6].split(',')[0])
+                price_primary_wholesale = parse_to_int(row[7].split(',')[0])
                 if row[8]:
                     balance = parse_to_int(row[8].split(',')[0])
                 else:
@@ -193,7 +193,7 @@ def load_csv(filename):
 
                 price_retail = parse_to_int(row[5].split(',')[0])
                 price_wholesale = parse_to_int(row[6].split(',')[0])
-                price_primary_wholesale = parse_to_int(row[6].split(',')[0])
+                price_primary_wholesale = parse_to_int(row[7].split(',')[0])
                 #выставляем нулевые цены в сам товар, чтобы нигде случайно не показать эту цену.
                 #расчет для колец ведется в зависимости от размера
                 item = Item.objects.get(article=article)
