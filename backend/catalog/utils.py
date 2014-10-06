@@ -80,3 +80,8 @@ class CustomItem(ItemPriceCalculatorMixin):
             return True
         else:
             return False
+
+class CustomItemSize(ItemPriceCalculatorMixin):
+    def __init__(self, item, user):
+        self.user = user
+        self.item = item

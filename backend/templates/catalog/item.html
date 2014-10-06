@@ -55,11 +55,11 @@
           {% if product.item.new %}
             <div class="newitem-marker">Новинка</div>
           {% endif %}
-          <div class="price">
-            {% if product.has_sale %}
-              <span class="previous-price">{{ product.item.price_retail }} руб.</span>
-            {% endif %}
-          <span>{{ product.price }} руб.</span>
+          <div id="js-price" class="price" data-retailprice="{{product.price_retail}}" data-price="{{product.price}}">
+            
+              <span class="previous-price" {% if not product.has_sale %}style="display:none"{% endif %}>{{ product.price_retail }} руб.</span>
+            
+              <span class="current-price">{{ product.price }} руб.</span>
           </div>
           <div class="excerpt">
             <p>Вес: {{ product.item.weight }}</p>
@@ -75,8 +75,8 @@
               <div class="size inline">
                 <h5>Размер</h5>
                 <select id="js-sizes" class="md-select ">
-                  {% for size, available, selected in sizes %}
-                    <option value="{{ size }}" style="{% if not available %}color: #FA8072;{% else %}color: green;{% endif %}" {% if selected %}selected{% endif %} data-available="{{ available|yesno:"1,0" }}">{{ size }}</option>
+                  {% for i in sizes %}
+                    <option value="{{ i.size }}" style="{% if not i.available %}color: #FA8072;{% else %}color: green;{% endif %}" {% if i.selected %}selected{% endif %} data-available="{{ i.available|yesno:"1,0" }}" {%if i.price %}data-price="{{i.price}}"{% endif %}{% if i.retailprice %}data-retailprice="{{i.retailprice}}"{% endif %}%>{{ i.size }}</option>
                   {% endfor %}
                 </select>
               </div>

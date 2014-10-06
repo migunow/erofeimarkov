@@ -4,8 +4,8 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Min, Max
 from django.shortcuts import render
 from django.views.generic import View
-from cart.cart import CART_ID
-from catalog.utils import CustomPaginator, CustomItem
+from cart.cart import CART_ID, ItemPriceCalculatorMixin
+from catalog.utils import CustomPaginator, CustomItem, CustomItemSize
 
 from .models import ItemCategory, ItemType, InsertionKind, Item
 
@@ -146,21 +146,22 @@ class ItemView(View):
     def get(self, request, item_id):
         item = Item.objects.get(id=item_id)
         all_sizes = item.type.get_sizes()
-        availiable_sizes = item.itemsizes_set.values_list('size', flat=True)
+        
+        available_sizes = dict ((itemsize.size, CustomItemSize(itemsize, request.user)) for itemsize in item.itemsizes_set.all())
+        
         sizes = []
         marked = False
         for size in all_sizes:
-            raw_size = [size]
-            if size in availiable_sizes:
-                raw_size.append(True)
-            else:
-                raw_size.append(False)
-
-            if not marked and size in availiable_sizes:
+            raw_size = {
+                "size" : size,
+                "selected" : not marked and size in available_sizes,
+                "available" : size in available_sizes,
+                "price" : available_sizes[size].get_price(available_sizes[size].item) if size in available_sizes else False,
+                "retailprice" : available_sizes[size].item.price_retail if size in available_sizes else False
+            }
+            if (raw_size["selected"]):
                 marked = True
-                raw_size.append(True)
-            else:
-                raw_size.append(False)
+            print raw_size
             sizes.append(raw_size)
 
         #позиции в корзине
