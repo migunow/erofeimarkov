@@ -18,7 +18,7 @@ class SizesAdmin(admin.TabularInline):
 
 class ItemAdmin(admin.ModelAdmin):
     list_display = ('article', 'category', 'type', 'price_retail', 'price_wholesale', 'price_primary_wholesale',)
-    list_filter = ('category', 'type', 'new',)
+    list_filter = ('category', 'type', 'new', 'is_deleted',)
     search_fields = ('=article',)
     inlines = (InsertionAdmin, SizesAdmin,)
     filter_horizontal = ('relatedItems',)

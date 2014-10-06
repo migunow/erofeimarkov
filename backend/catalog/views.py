@@ -85,7 +85,7 @@ class CatalogView(View):
         if article_key:
             filters['article__icontains'] = article_key
 
-        query_set = Item.objects.filter(**filters)
+        query_set = Item.objects.filter(is_deleted=False, **filters).distinct()
         if ordering:
             query_set = query_set.order_by(ordering)
 
@@ -110,7 +110,7 @@ class CatalogView(View):
         #позиции в корзине
         cart_id = request.session.get(CART_ID)
         if cart_id:
-	    cart_positions = Item.objects.filter(item__cart=cart_id).values_list('id', flat=True)
+            cart_positions = Item.objects.filter(item__cart=cart_id).values_list('id', flat=True)
         else:
             cart_positions = []
 

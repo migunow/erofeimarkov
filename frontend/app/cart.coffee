@@ -31,7 +31,6 @@ make_search = (event)->
   event.preventDefault()
   text = $('#js-search-from-cart').val()
   new_url = "/catalog/?search=#{text}"
-  debugger
   window.location.href = new_url
 
 #поиск из меню корзины

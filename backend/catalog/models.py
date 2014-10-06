@@ -86,6 +86,7 @@ class Item(ItemFields):
     new = models.BooleanField(default=False, verbose_name='Новинка')
     balance = models.PositiveIntegerField('Остаток', default=0)
     sorting_order = models.PositiveIntegerField(default=500)
+    is_deleted = models.BooleanField('Удален из каталога',default=False)
 
     class Meta:
         verbose_name = 'Изделие'
@@ -96,7 +97,7 @@ class Item(ItemFields):
         return self.article
 
     def get_full_name(self):
-        return '{} <br> <span style="font-size:22px;">арт. {}</span>'.format(self.name or self.category.name, self.article)
+        return '{} <br> <span style="font-size:15px;text-transform: none;">Арт. {}</span>'.format(self.name or self.category.name, self.article)
 
     def get_absolute_url(self):
         return reverse('catalog:item', kwargs={'item_id': str(self.id)})
@@ -151,8 +152,6 @@ class Item(ItemFields):
             image.paste(wm, (image.size[0]/2-wm.size[0]/2, image.size[1]/2-wm.size[1]/2), wm)
         path_to_thumbnail = '{0}/{1}.jpg'.format(path_to_thumbnail_dir, slugify(self.article)).encode('utf-8')
         image.save(path_to_thumbnail, "JPEG", quality=100)
-
-
 
 
 class ItemSizes(ItemFields):

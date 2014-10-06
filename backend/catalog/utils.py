@@ -36,6 +36,10 @@ class CustomPaginator(Paginator):
         if current_page < self.pages_half:
             return self.make_range(first_page, first_page + self.pages_count)
 
+        #если мы ровно в середине
+        if current_page == self.pages_half:
+            return self.make_range(current_page - self.pages_half + 1, current_page + self.pages_half)
+
         #если мы просто где-то посередине - отступаем с 2х сторон одинаково
         return self.make_range(current_page - self.pages_half, current_page + self.pages_half)
 
