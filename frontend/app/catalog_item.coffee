@@ -7,7 +7,7 @@ check_available_size = ->
   has_sizes = !!size_selectbox.length
 
   if has_sizes
-    if size_selectbox.find('option:selected').data('available')
+    if size_selectbox.find('option:selected').data('available') && availability_container.data('available-balance')
       availability_container.addClass('available')
     else
       availability_container.addClass('no-size-available')
