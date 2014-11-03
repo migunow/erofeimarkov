@@ -35,6 +35,7 @@ INSTALLED_APPS = (
     'cart',
     'south',
     'mymigrate',
+    'productfeeds'
 )
 
 MIDDLEWARE_CLASSES = (

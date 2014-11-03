@@ -9,6 +9,7 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
+    url(r'^feeds/', include('productfeeds.urls')),
     url(r'^moscow-admin/', include(admin.site.urls)),
     url(r'^authentication/', include('authentication.urls', namespace='authentication')),
     url(r'^catalog/', include('catalog.urls', namespace='catalog')),
