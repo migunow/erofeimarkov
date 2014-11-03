@@ -9,7 +9,7 @@ from catalog.models import *
 
 def googleFeed(req):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="erofeimarkov_feed.csv"'
+    response['Content-Disposition'] = 'attachment; filename="erofeimarkov_google_feed.csv"'
 
     writer = csv.writer(response, delimiter ='|')
     writer.writerow(['id', 'title', 'description', 'google_product_category', 'product_type', 'link', 'image_link', 'condition', 'availability', 'price'])
@@ -20,7 +20,16 @@ def googleFeed(req):
     return response
 
 def yamarketFeed(req):
-    return HttpResponseNotFound('Not implemented yet')
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="erofeimarkov_yamarket_feed.csv"'
+
+    writer = csv.writer(response, delimiter =';')
+    writer.writerow(['id', 'name', 'available', 'url', 'picture', 'category', 'delivery', 'price', 'currencyId',])
+    for item in Item.objects.all():
+    	itemname = item.name if item.name else item.type.name
+    	writer.writerow([item.id, itemname, 'true', 'http://erofeimarkov.ru' + item.get_absolute_url(), 'http://erofeimarkov.ru' + item.get_212x281_preview(), u'Подарки и цветы/Ювелирные изделия', 'true', str(item.price_retail),  u'RUR'])
+
+    return response
 
 def wikimartFeed(req):
     return HttpResponseNotFound('Not implemented yet')
