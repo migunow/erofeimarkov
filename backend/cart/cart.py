@@ -24,13 +24,16 @@ class CartItemService(ItemPriceCalculatorMixin):
         self.cart_item = cart_item
 
     def price(self):
-        #если изделия имеет размеры - то считаем по размерам
-        if self.cart_item.product.type.sizes:
-            _item = self.cart_item.product.itemsizes_set.get(size=self.cart_item.size)
-            return self.get_price(_item)
-        #если нет - то просто выдаем цену по каталогу
+        if self.cart_item.product.special_price:
+            return self.cart_item.product.special_price
         else:
-            return self.get_price(self.cart_item.product)
+            #если изделия имеет размеры - то считаем по размерам
+            if self.cart_item.product.type.sizes:
+                _item = self.cart_item.product.itemsizes_set.get(size=self.cart_item.size)
+                return self.get_price(_item)
+            #если нет - то просто выдаем цену по каталогу
+            else:
+                return self.get_price(self.cart_item.product)
 
 
     def total(self):

@@ -26,6 +26,9 @@
                 <div class="accordion-inner">
                   <ul id="js-category-filter">
                     <li>
+                      <a id="js-special-filter" style="color: red" class="js-category {% if special %}category-selected{% endif %}" href="#">Акции</a>
+                    </li>
+                    <li>
                       <a id="js-new-filter" class="js-category {% if new %}category-selected{% endif %}" href="#">Новинки</a>
                     </li>
                     {% for category in item_categories %}

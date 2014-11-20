@@ -68,6 +68,7 @@ class ItemFields(models.Model):
     price_retail = models.PositiveIntegerField('Розничная цена')
     price_wholesale = models.PositiveIntegerField('Оптовая цена')
     price_primary_wholesale = models.PositiveIntegerField('Первичная оптовая цена')
+
     weight = models.DecimalField(max_digits=5, decimal_places=3, blank=True, null=True, verbose_name='Вес')
     code = models.CharField('Штрихкод', max_length=50, blank=True)
 
@@ -87,6 +88,8 @@ class Item(ItemFields):
     balance = models.PositiveIntegerField('Остаток', default=0)
     sorting_order = models.PositiveIntegerField(default=500)
     is_deleted = models.BooleanField('Удален из каталога',default=False)
+    special = models.BooleanField(verbose_name="Акция", default=False)
+    special_price = models.PositiveIntegerField(verbose_name="Акционная цена", default=0)
 
     class Meta:
         verbose_name = 'Изделие'

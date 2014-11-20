@@ -43,6 +43,14 @@ class CatalogView(View):
             filters['new'] = True
         else:
             new = False
+
+        special = int(request.GET.get('special', 0))
+        if special == 1:
+            special = True
+            filters['special'] = True
+        else:
+            special = False
+
         filter_categories = self.convert(request.GET.get('categories'))
         if filter_categories:
             filters['category__id__in'] = filter_categories
@@ -129,6 +137,7 @@ class CatalogView(View):
             'filter_insertions': filter_insertions,
             'filter_types': filter_types,
             'new': new,
+            'special': special,
             'products': custom_items,
             'paginator': paginator,
             'cart_positions': cart_positions,

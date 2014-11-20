@@ -50,17 +50,21 @@ class CustomItem(ItemPriceCalculatorMixin):
         self.item = item
 
     def price(self):
-        #если изделия имеет размеры - то считаем по размерам
-        if self.item.type.sizes:
-            _item = self.item.itemsizes_set.all()
-            if _item.exists():
-                return self.get_price(_item[0])
+        # если изделие акционное
+        if self.item.special and self.item.special_price:
+            return self.item.special_price
+        else:
+            #если изделия имеет размеры - то считаем по размерам
+            if self.item.type.sizes:
+                _item = self.item.itemsizes_set.all()
+                if _item.exists():
+                    return self.get_price(_item[0])
+                else:
+                    return self.get_price(self.item)
+
+            #если нет - то просто выдаем цену по каталогу
             else:
                 return self.get_price(self.item)
-
-        #если нет - то просто выдаем цену по каталогу
-        else:
-            return self.get_price(self.item)
 
     def price_retail(self):
         #если изделия имеет размеры - то считаем по размерам
