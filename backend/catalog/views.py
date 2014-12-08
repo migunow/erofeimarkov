@@ -165,7 +165,7 @@ class ItemView(View):
                 "size" : size,
                 "selected" : not marked and size in available_sizes,
                 "available" : size in available_sizes,
-                "price" : available_sizes[size].get_price(available_sizes[size].item) if size in available_sizes else False,
+                "price" : (available_sizes[size].get_price(available_sizes[size].item) if size in available_sizes else False) if not item.special else item.special_price,
                 "retailprice" : available_sizes[size].item.price_retail if size in available_sizes else False
             }
             if (raw_size["selected"]):
