@@ -17,13 +17,9 @@
 <body>
   {% csrf_token %}
   <div class="wrapper">
-    {% block header %}
-      {% include 'header.html' %}
-    {% endblock header %}
+    {% include 'header.html' %}
     {% block content %}{% endblock content %}
-    {% block footer %}
-      {% include 'footer.html' %}
-    {% endblock footer %}
+    {% include 'footer.html' %}
   </div>
   <script src="{% static 'javascripts/vendor.js' %}"></script>
   <script src="{% static 'javascripts/app.js' %}"></script>
@@ -46,14 +42,14 @@
     s.async = true;
     s.src = 'https://lcab.sms-uslugi.ru/support/support.js?h=aad47d68509845d42a77f79c5d2ce8a2';
     var sc = document.getElementsByTagName('script')[0];
-    
+
     var callback = function(){
       /*
         Здесь вы можете вызывать API. Например, чтобы изменить отступ по высоте:
         supportAPI.setSupportTop(200);
       */
     };
-    
+
     s.onreadystatechange = s.onload = function(){
       var state = s.readyState;
       if (!callback.done && (!state || /loaded|complete/.test(state))) {
@@ -61,7 +57,7 @@
         callback();
       }
     };
-    
+
     if (sc) sc.parentNode.insertBefore(s, sc);
     else document.documentElement.firstChild.appendChild(s);
   })();
