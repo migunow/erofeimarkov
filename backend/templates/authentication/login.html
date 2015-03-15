@@ -13,11 +13,11 @@
             </p>
             <input name="email" class="md-input col-xs-12" placeholder="e-mail">
             <input type="password" name="password" class="md-input col-xs-12" placeholder="пароль">
-            <a class="forget-link" href="{% url 'authentication:restore' %}">Забыли пароль?</a>
             {% if error_message %}
-              <a class="forget-link">{{ error_message }}</a>
+              <div class="errors">{{ error_message }}</div>
             {% endif %}
             <button class="md-button narrow " type="submit">Войти</button>
+            <a class="forget-link" href="{% url 'authentication:restore' %}">Забыли пароль?</a>
           </form>
         </div>
         <div class="col-xs-12 col-sm-6">
@@ -26,10 +26,9 @@
             <p>
               Вы можете сделать свой заказ и без регистрации.
             </p>
-            <br>
-            <a href="{% url 'catalog:catalog' %}">
-              <button class="md-button narrow" type="button">продолжить как гость</button>
-            </a>
+            <p>
+                <a class="md-button narrow" href="{% url 'catalog:catalog' %}">Продолжить как гость</a>
+            </p>
           </form>
         </div>
       </div>

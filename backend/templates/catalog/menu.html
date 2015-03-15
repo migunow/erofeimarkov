@@ -26,22 +26,6 @@
 </div>
 <div class="accordion-group">
   <div class="accordion-heading">
-    <a class="accordion-toggle" data-toggle="collapse" href="#collapseTwo">Виды вставок</a>
-</div>
-<div id="collapseTwo" class="accordion-body collapse in">
-    <div class="accordion-inner">
-      <ul id="js-insertion-filter">
-        {% for insertion_kind in insertion_kinds %}
-        <li>
-          <a class="js-category {% if insertion_kind.id in filter_insertions %}category-selected{% endif %}" href="#" data-id="{{ insertion_kind.id }}">{{ insertion_kind.name }}</a>
-      </li>
-      {% endfor %}
-  </ul>
-</div>
-</div>
-</div>
-<div class="accordion-group">
-  <div class="accordion-heading">
     <a class="accordion-toggle" data-toggle="collapse" href="#collapse3">Виды изделий</a>
 </div>
 <div id="collapse3" class="accordion-body collapse in">
@@ -50,6 +34,22 @@
         {% for item_type in item_types %}
         <li>
           <a class="js-category {% if item_type.id in filter_types %}category-selected{% endif %}" href="#" data-id="{{ item_type.id }}">{{ item_type.name }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</div>
+</div>
+</div>
+<div class="accordion-group">
+  <div class="accordion-heading">
+    <a class="accordion-toggle" data-toggle="collapse" href="#collapseTwo">Виды вставок</a>
+</div>
+<div id="collapseTwo" class="accordion-body collapse in">
+    <div class="accordion-inner">
+      <ul id="js-insertion-filter">
+        {% for insertion_kind in insertion_kinds %}
+        <li>
+          <a class="js-category {% if insertion_kind.id in filter_insertions %}category-selected{% endif %}" href="#" data-id="{{ insertion_kind.id }}">{{ insertion_kind.name }}</a>
       </li>
       {% endfor %}
   </ul>
