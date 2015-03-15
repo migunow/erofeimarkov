@@ -1,4 +1,3 @@
-{% load static from staticfiles %}
 <header>
   <div class=" container">
     <section class="style-one-header top-area">
@@ -7,18 +6,13 @@
           <div class="login-menu-holder ic-sm-user">
             Добро пожаловать!
           </div>
-          <div class="hotline-holder ic-sm-phone">
-            <label>Тел.:</label>
-            <span>8(800) 505-25-17</span>
-            <p><small>(звонок по России бесплатный)</small></p>
+          <div class="hotline ic-sm-phone">
+            <span class="hotline__phone">8 (800) 505-25-17</span>
+            <div class="hotline__notice">(звонок по России бесплатный)</div>
           </div>
         </div>
         <div class="top-logo-holder col-sm-4 col-xs-12">
-          <div class="top-logo">
-            <a href="{% url 'catalog:catalog' %}">
-              <img alt="LOGO" src="{% static 'images/logo.png' %}"/>
-            </a>
-          </div>
+          <a href="{% url 'catalog:catalog' %}" class="top-logo"></a>
         </div>
         <div class="col-sm-4 col-xs-12">
           {% include 'cart/cart.html' %}
@@ -28,30 +22,28 @@
     <div class="top-menu visible-md visible-lg">
       <ul>
         <li class="">
-          <a href="{% url 'catalog:catalog' %}" class="js-menu" data-category="catalog">ЮВЕЛИРНЫЙ КАТАЛОГ</a>
+          <a href="{% url 'catalog:catalog' %}" class="js-menu" data-category="catalog">Ювелирный каталог</a>
         </li>
         <li>
-          <a href="{% url 'pages:news' %}" class="js-menu" data-category="news">НОВОСТИ</a>
+          <a href="{% url 'pages:news' %}" class="js-menu" data-category="news">Новости</a>
         </li>
         <li>
 
-          <a href="{% url 'pages:delivery' %}" class="js-menu" data-category="news">ОПЛАТА И ДОСТАВКА</a>
+          <a href="{% url 'pages:delivery' %}" class="js-menu" data-category="news">Оплата и доставка</a>
         </li>
         <li>
-          <a href="{% url 'pages:contacts' %}" class="js-menu" data-category="contacts">КОНТАКТЫ</a>
+          <a href="{% url 'pages:contacts' %}" class="js-menu" data-category="contacts">Контакты</a>
         </li>
         <li>
-          <a href="{% url 'pages:about' %}" class="js-menu" data-category="about">О КОМПАНИИ</a>
+          <a href="{% url 'pages:about' %}" class="js-menu" data-category="about">О компании</a>
         </li>
-        {% if not request.user.is_authenticated %}
         <li>
-          <a href="{% url 'authentication:login' %}" class="js-menu" data-category="login">ВХОД</a>
+          {% if not request.user.is_authenticated %}
+          <a href="{% url 'authentication:login' %}" class="js-menu" data-category="login">Вход</a>
+          {% else %}<li>
+          <a href="{% url 'authentication:logout' %}">Выход</a>
+          {% endif %}
         </li>
-        {% else %}
-        <li>
-          <a href="{% url 'authentication:logout' %}">ВЫХОД</a>
-        </li>
-        {% endif %}
       </ul>
     </div>
   </div>

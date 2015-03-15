@@ -56,9 +56,9 @@
             <div class="newitem-marker">Новинка</div>
           {% endif %}
           <div id="js-price" class="price" data-retailprice="{{product.price_retail}}" data-price="{{product.price}}">
-            
+
               <span class="previous-price" {% if not product.has_sale %}style="display:none"{% endif %}>{{ product.price_retail }} руб.</span>
-            
+
               <span class="current-price">{{ product.price }} руб.</span>
           </div>
           <div class="excerpt">
@@ -200,7 +200,7 @@
 
 
 {% if product.item.relatedItems.all %}
-<section class="section-related-products single-product-page" style="margin-top: 17px; font-size: 30px;">
+<section class="section-related-products single-product-page">
   <div class="container">
     <h2>Похожие товары</h2>
     <div class="product-grid no-move-down">
@@ -216,6 +216,15 @@
               {% autoescape off %}
                 <a href="{{ alt_product.get_absolute_url }}">{{ alt_product.get_full_name }}</a>
               {% endautoescape %}
+            </div>
+            <div class="buttons-holder">
+              <div class="add-cart-holder">
+                {% if alt_product.item.id in cart_positions %}
+                  <a class="md-button" href="{% url 'cart:order' %}" style="background-color: #e8bf1a; color: #3b3b3b;">В корзине</a>
+                {% else %}
+                  <a class="md-button js-add-to-cart" data-id="{{ alt_product.item.id }}" href="#">В корзину</a>
+                {% endif %}
+              </div>
             </div>
           </div>
         </div>
