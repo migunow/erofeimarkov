@@ -27,7 +27,7 @@ def yamarketFeed(req):
     writer.writerow(['id', 'name', 'available', 'url', 'picture', 'category', 'delivery', 'price', 'currencyId',])
     for item in Item.objects.all():
     	itemname = item.name if item.name else item.type.name
-    	writer.writerow([item.id, itemname, 'true', 'http://erofeimarkov.ru' + item.get_absolute_url(), 'http://erofeimarkov.ru' + item.get_212x281_preview(), u'Подарки и цветы/Ювелирные изделия', 'true', str(item.price_retail),  u'RUR'])
+    	writer.writerow([item.id, itemname, 'true', 'http://erofeimarkov.ru' + item.get_absolute_url(), 'http://erofeimarkov.ru' + item.get_212x281_preview(), u'Подарки и цветы/Ювелирные изделия', 'false', str(item.price_retail),  u'RUR'])
 
     return response
 
