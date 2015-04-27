@@ -32,7 +32,7 @@ class CatalogView(View):
 
     def get_price_range(self, request):
         price_column = self.get_user_price_field(request)
-        return Item.objects.all().aggregate(price_min=Min(price_column), price_max=Max(price_column))
+        return Item.objects.filter(is_deleted=False).aggregate(price_min=Min(price_column), price_max=Max(price_column))
 
     def get(self, request):
         #создаем переданные фильтры
