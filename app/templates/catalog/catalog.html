@@ -82,9 +82,9 @@
                 <div class="buttons-holder">
                   <div class="add-cart-holder">
                     {% if product.item.id in cart_positions %}
-                      <a class="md-button" href="{% url 'cart:order' %}" style="background-color: #e8bf1a; color: #3b3b3b;">В корзине</a>
+                      <a class="md-button add-to-cart-button add-to-cart-button__added" href="{% url 'cart:order' %}" style="">В корзине</a>
                     {% else %}
-                      <a class="md-button js-add-to-cart" data-id="{{ product.item.id }}" href="#">В корзину</a>
+                      <a class="md-button add-to-cart-button js-add-to-cart" data-id="{{ product.item.id }}" href="#">В корзину</a>
                     {% endif %}
                   </div>
 {#                  <div class="add-wishlist-holder">#}

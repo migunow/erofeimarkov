@@ -289,6 +289,16 @@ hr {
     padding: 9px 43px;
 }
 
+.md-button.add-to-cart-button:hover {
+    background-color: #e8bf1a;  
+    color: #3b3b3b;
+}
+
+.md-button.add-to-cart-button__added {
+    background-color: #ffdb4d;
+    color: #3b3b3b;
+}
+
 .md-button {
     display: inline-block;
 
