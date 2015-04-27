@@ -10,6 +10,8 @@ class Filter
 
   new_filter: false
 
+  instock_filter: false
+
   special_filter: false
 
   sorting: ''
@@ -65,6 +67,12 @@ class Filter
     else
       new_filter = ''
 
+    @instock_filter = $('#js-instock-filter').hasClass('category-selected')
+    if @instock_filter
+      instock_filter = "instock=1"
+    else
+      instock_filter = ''
+
     #категории
     @special_filter = $('#js-special-filter').hasClass('category-selected')
     if @special_filter
@@ -99,7 +107,7 @@ class Filter
     categories = @make_query_str('categories', category_filters)
     insertions = @make_query_str('insertions', insertion_filters)
     types = @make_query_str('types', type_filters)
-    query_items = [active_tab_filter, new_filter, special_filter, categories, insertions, types, sorting, page, price_filter]
+    query_items = [active_tab_filter, new_filter, instock_filter, special_filter, categories, insertions, types, sorting, page, price_filter]
     query_items = query_items.filter((item) ->
       item isnt ""
     )

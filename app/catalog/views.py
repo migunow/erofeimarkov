@@ -51,6 +51,10 @@ class CatalogView(View):
         else:
             special = False
 
+        instock = int(request.GET.get('instock', 0))
+        if instock == 1:
+            filters['balance__gt'] = 0;
+
         filter_categories = self.convert(request.GET.get('categories'))
         if filter_categories:
             filters['category__id__in'] = filter_categories
@@ -137,6 +141,7 @@ class CatalogView(View):
             'filter_insertions': filter_insertions,
             'filter_types': filter_types,
             'new': new,
+            'instock': instock,
             'special': special,
             'products': custom_items,
             'paginator': paginator,
