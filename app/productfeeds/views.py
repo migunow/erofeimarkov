@@ -99,4 +99,6 @@ def wikimartFeed(req):
 
     top_element.appendChild(offers)
     # print doc.toprettyxml()
-    return HttpResponse(doc.toprettyxml(), content_type="text/xml")
+    response = HttpResponse(doc.toprettyxml(), content_type="text/xml")
+    response['Content-Disposition'] = 'attachment; filename="erofeimarkov_wikimart_feed.xml"'
+    return response
