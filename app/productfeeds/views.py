@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
 import unicodecsv as csv
 from django.http import HttpResponse, HttpResponseNotFound
 from catalog.models import *
+from xml.dom.minidom import DOMImplementation
+from datetime import datetime
 
 # Create your views here.
 
@@ -32,4 +35,68 @@ def yamarketFeed(req):
     return response
 
 def wikimartFeed(req):
-    return HttpResponseNotFound('Not implemented yet')
+    imp = DOMImplementation()
+    doctype = imp.createDocumentType(
+        qualifiedName='yml_catalog',
+        publicId='', 
+        systemId='shops.dtd',
+    )
+    doc = imp.createDocument(None, 'yml_catalog', doctype)
+    
+    def createTextNode(nodeName, value):
+        node = doc.createElement(nodeName)
+        node.appendChild(doc.createTextNode(value))
+        return node
+
+    def createCategoryElement(category):
+        el = doc.createElement("category")
+        el.setAttribute("id", str(category.id))
+        el.appendChild(doc.createTextNode(category.name))
+        return el
+
+    def createOfferElement(item):
+        el = doc.createElement("offer")
+        el.setAttribute("id", str(item.id))
+        el.setAttribute("available", ['false', 'true'][item.balance>0])
+        el.appendChild(createTextNode("url", "http://erofeimarkov.ru" + item.get_absolute_url()))
+        el.appendChild(createTextNode("price", str(item.price_retail)))
+        el.appendChild(createTextNode("picture", "http://erofeimarkov.ru" + item.get_212x281_preview()))
+        el.appendChild(createTextNode("vendor", "Erofei Markov Jewelry"))
+        el.appendChild(createTextNode("typePrefix", unicode(item.name if item.name else item.type.name)))
+        el.appendChild(createTextNode("name", "Арт. "+item.article))
+        el.appendChild(createTextNode("categoryid", str(item.type.id)))
+        el.appendChild(createTextNode("currencyid", "RUR"))
+        return el 
+
+    top_element = doc.documentElement
+    top_element.setAttribute("date", datetime.now().strftime("%Y-%m-%d %H:%M"))
+
+    shops = doc.createElement('shops')
+    erofeimarkovShop = doc.createElement('shop')
+    erofeimarkovShop.appendChild(createTextNode("name", "Ерофей Марков"))
+    erofeimarkovShop.appendChild(createTextNode("company", "Ювелирная Компания &quot;Ерофей Марков&quot;"))
+    erofeimarkovShop.appendChild(createTextNode("url", "http://erofeimarkov.ru/catalog"))
+    shops.appendChild(erofeimarkovShop)
+    top_element.appendChild(shops)
+    
+    currencies = doc.createElement("currencies")
+    rur = doc.createElement("currency")
+    rur.setAttribute("id", "RUR")
+    rur.setAttribute("rate", "1")
+    currencies.appendChild(rur)
+    top_element.appendChild(currencies)
+
+    categories = doc.createElement("categories")
+    for itemtype in ItemType.objects.all():
+        categories.appendChild(createCategoryElement(itemtype))
+
+    top_element.appendChild(categories)
+
+
+    offers = doc.createElement("offers")
+    for item in Item.objects.filter(is_deleted=False):
+        offers.appendChild(createOfferElement(item))
+
+    top_element.appendChild(offers)
+    # print doc.toprettyxml()
+    return HttpResponse(doc.toprettyxml(), content_type="text/xml")
