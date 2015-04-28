@@ -14,7 +14,7 @@ def googleFeed(req):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="erofeimarkov_google_feed.csv"'
 
-    writer = csv.writer(response, delimiter ='|')
+    writer = csv.writer(response, delimiter = str('|'))
     writer.writerow(['id', 'title', 'description', 'google_product_category', 'product_type', 'link', 'image_link', 'condition', 'availability', 'price'])
     for item in Item.objects.all():
     	itemname = item.name if item.name else item.type.name
@@ -26,7 +26,7 @@ def yamarketFeed(req):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="erofeimarkov_yamarket_feed.csv"'
 
-    writer = csv.writer(response, delimiter =';')
+    writer = csv.writer(response, delimiter = str(';'))
     writer.writerow(['id', 'name', 'available', 'url', 'picture', 'category', 'delivery', 'price', 'currencyId',])
     for item in Item.objects.all():
     	itemname = item.name if item.name else item.type.name
