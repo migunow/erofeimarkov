@@ -88,7 +88,7 @@ def wikimartFeed(req):
     top_element.appendChild(currencies)
 
     categories = doc.createElement("categories")
-    for itemtype in ItemType.objects.filter(is_deleted):
+    for itemtype in ItemType.objects.filter():
         categories.appendChild(createCategoryElement(itemtype))
 
     top_element.appendChild(categories)
