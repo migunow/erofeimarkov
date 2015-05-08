@@ -16,7 +16,7 @@ def googleFeed(req):
 
     writer = csv.writer(response, delimiter = str('|'))
     writer.writerow(['id', 'title', 'description', 'google_product_category', 'product_type', 'link', 'image_link', 'condition', 'availability', 'price'])
-    for item in Item.objects.all():
+    for item in Item.objects.filter(is_deleted=False):
     	itemname = item.name if item.name else item.type.name
     	writer.writerow([item.id, itemname, itemname, 'Apparel & Accessories > Jewelry', item.type.name, 'http://erofeimarkov.ru' + item.get_absolute_url(), 'http://erofeimarkov.ru' + item.get_212x281_preview(), 'new', 'in stock', str(item.price_retail) + u' рублей'])
 
@@ -28,7 +28,7 @@ def yamarketFeed(req):
 
     writer = csv.writer(response, delimiter = str(';'))
     writer.writerow(['id', 'name', 'available', 'url', 'picture', 'category', 'delivery', 'price', 'currencyId',])
-    for item in Item.objects.all():
+    for item in Item.objects.filter(is_deleted=False):
     	itemname = item.name if item.name else item.type.name
         itemprice = item.special_price if item.special and item.special_price else item.price_retail
     	writer.writerow([item.id, itemname, ['false', 'true'][item.balance>0], 'http://erofeimarkov.ru' + item.get_absolute_url(), 'http://erofeimarkov.ru' + item.get_212x281_preview(), u'Подарки и цветы/Ювелирные изделия', 'false', str(itemprice),  u'RUR'])
@@ -88,7 +88,7 @@ def wikimartFeed(req):
     top_element.appendChild(currencies)
 
     categories = doc.createElement("categories")
-    for itemtype in ItemType.objects.all():
+    for itemtype in ItemType.objects.filter(is_deleted):
         categories.appendChild(createCategoryElement(itemtype))
 
     top_element.appendChild(categories)
