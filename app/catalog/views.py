@@ -2,7 +2,7 @@
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Min, Max
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import View
 from cart.cart import CART_ID, ItemPriceCalculatorMixin
 from catalog.utils import CustomPaginator, CustomItem, CustomItemSize
@@ -132,7 +132,7 @@ class CatalogView(View):
 
 class ItemView(View):
     def get(self, request, item_id):
-        item = Item.objects.get(id=item_id)
+        item = get_object_or_404(Item, pk=item_id, is_deleted=False)
         all_sizes = item.type.get_sizes()
         
         available_sizes = dict ((itemsize.size, CustomItemSize(itemsize, request.user)) for itemsize in item.itemsizes_set.all())
