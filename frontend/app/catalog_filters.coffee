@@ -80,25 +80,13 @@ class Filter
     else
       special_filter = ''
 
-    #сортировка по цене
-    $price_el = $('#js-price-filter')
-    min_price = +$price_el.data('price-min')
-    max_price = +$price_el.data('price-max')
-    prices = $('#js-price-filter').val().split(',')
-    price_min_filter = +prices[0]
-    price_max_filter = +prices[1]
-    #если дефолтные фильтры смещены, то добавляем их в адресную строку
-    if min_price != price_min_filter or max_price != price_max_filter
-      price_filter = "price_min=#{price_min_filter}&price_max=#{price_max_filter}"
-    else
-      price_filter = ''
+    @search_string = $('#js-search-from-cart').val()
 
-    #активная вкладка
-    active_tab = $('.tab-pane.active').attr('id')
-    if active_tab is 'grid-view'
-      active_tab_filter = ''
+    if @search_string
+      search_string = "search="+@search_string
     else
-      active_tab_filter = 'view=list-view'
+      search_string = ''
+
 
     category_filters = $.map($('#js-category-filter').find('.category-selected'), (value, key)=>return $(value).data('id'))
     insertion_filters = $.map($('#js-insertion-filter').find('.category-selected'), (value, key)=>return $(value).data('id'))
@@ -107,7 +95,7 @@ class Filter
     categories = @make_query_str('categories', category_filters)
     insertions = @make_query_str('insertions', insertion_filters)
     types = @make_query_str('types', type_filters)
-    query_items = [active_tab_filter, new_filter, instock_filter, special_filter, categories, insertions, types, sorting, page, price_filter]
+    query_items = [new_filter, instock_filter, special_filter, categories, insertions, types, sorting, page, search_string]
     query_items = query_items.filter((item) ->
       item isnt ""
     )
