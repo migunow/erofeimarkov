@@ -1,0 +1,42 @@
+<div class="sidebar">
+<h5 class="clearfix"><a href="{% url 'catalog:catalog' %}" class="reset-filter">Сбросить фильтры</a></h5>
+<div class="filter-group">
+    <h5 class="filter-group-name">Категории</h5>
+    <ul id="js-category-filter">
+        <li class="{% if special %}category-selected{% endif %}" >
+            <a id="js-special-filter" style="color: red" class="js-category {% if special %}category-selected{% endif %}" href="#">Акции</a>
+        </li>
+        <li class="{% if instock %}category-selected{% endif %}" >
+            <a id="js-instock-filter" class="js-category {% if instock %}category-selected{% endif %}" href="#">В наличии</a>
+        </li>
+        <li class="{% if new %}category-selected{% endif %}" >
+            <a id="js-new-filter" class="js-category {% if new %}category-selected{% endif %}" href="#">Новинки</a>
+        </li>
+        {% for category in item_categories %}
+        <li class="{% if category.id in filter_categories %}category-selected{% endif %}" >
+            <a class="js-category {% if category.id in filter_categories %}category-selected{% endif %}" href="#" data-id="{{ category.id }}">{{ category.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="filter-group">
+    <h5 class="filter-group-name">Виды изделий</h5>
+    <ul id="js-type-filter">
+        {% for item_type in item_types %}
+        <li>
+            <a class="js-category {% if item_type.id in filter_types %}category-selected{% endif %}" href="#" data-id="{{ item_type.id }}">{{ item_type.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="filter-group">
+    <h5 class="filter-group-name">Виды вставок</h5>
+    <ul id="js-insertion-filter">
+        {% for insertion_kind in insertion_kinds %}
+        <li>
+            <a class="js-category {% if insertion_kind.id in filter_insertions %}category-selected{% endif %}" href="#" data-id="{{ insertion_kind.id }}">{{ insertion_kind.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+</div>

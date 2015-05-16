@@ -1,170 +1,100 @@
 {% extends 'base.html' %}
 {% block requirejs %}
-  require('catalog_filters');
+require('catalog_filters');
 {% endblock requirejs %}
 
 {% block extra_title %} - Каталог{% endblock %}
 
 {% block extra_head %}
-  <meta name="keywords" content="erofei markov jewelry, ерофей марков, каталог ювелирных изделий, ювелирный интернет магазин, оптовая продажа ювелирных изделий, ювелирные изделия из золота" />
-  <meta name="description" content="Каталог ювелирных изделий интернет-магазина Erofei Markov Jewelry: украшения из золота с полудрагоценными и драгоценными камнями, доставка по России и СНГ" />
+<meta name="keywords" content="erofei markov jewelry, ерофей марков, каталог ювелирных изделий, ювелирный интернет магазин, оптовая продажа ювелирных изделий, ювелирные изделия из золота" />
+<meta name="description" content="Каталог ювелирных изделий интернет-магазина Erofei Markov Jewelry: украшения из золота с полудрагоценными и драгоценными камнями, доставка по России и СНГ" />
 {% endblock extra_head %}
 
 {% block content %}
 <section id="products-grid-sidebar" class="section-products-grid">
-  <div class="container">
-    <div class="col-xs-12 col-md-3">
-      {% include 'catalog/menu.html' %}
-    </div>
-    <div class="col-xs-12 col-md-9">
-      <div class="row">
-        <div class="col-xs-6">
-          <div class="sort-dropdown-holder">
-            <div class="dropdown ">
-              <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
-                                        сортировка <span class="fa fa-angle-down"></span>
-                                    </a>
-              <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <li role="presentation">
-                  <a class="js-sorting-order {% if ordering_filter == '+' %}category-selected{% endif %}" data-sorting="price" role="menuitem" tabindex="-1" href="#">От <strong>меньшей</strong> к <strong>большей</strong> цене</a>
-                </li>
-                <li role="presentation">
-                  <a class="js-sorting-order {% if ordering_filter == '-' %}category-selected{% endif %}" data-sorting="-price" role="menuitem" tabindex="-1" href="#">От <strong>большой</strong> к <strong>меньшей</strong> цене</a>
-                </li>
-              </ul>
-            </div>
-          </div>
+    <div class="container">
+        <div class="col-xs-12 col-md-3">
+            {% include 'catalog/filter.html' %}
         </div>
-        <div class="col-xs-6">
-          <div class="grid-list-buttons">
-            <ul class="list-inline">
-              <li class="{% if not view_list %}active{% endif %}">
-                <a data-toggle="tab" href="#grid-view" class="js-set-active-tab" data-id="grid-view"><i class="fa fa-th-large"></i> Сетка</a>
-              </li>
-              <li class="{% if view_list %}active{% endif %}">
-                <a data-toggle="tab" href="#list-view" class="js-set-active-tab" data-id="list-view"><i class="fa fa-th-list"></i> Список</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="product-grid no-move-down tab-content">
-        <!--                            grid view starts here-->
-        <div id="grid-view" class="tab-pane {% if not view_list %}active{% endif %}">
-          {% for product in products %}
-            {% if forloop.first %}
-              <div class="row">
-            {% else %}
-              {% if forloop.counter0|divisibleby:"3" %}
-                </div>
-                <div class="row">
-              {% endif %}
-            {% endif %}
-            <div class=" col-lg-4 col-xs-12 product-holder">
-              <div class="product-item text-center">
-                <div class="image ">
-                  <a href="{{ product.item.get_absolute_url }}">
-                    <img alt="" src="{{ product.item.get_212x281_preview }}" width="212" height="281" />
-                  </a>
-                </div>
-                <hr>
-                <div class="title uppercase bold">
-                  {% autoescape off %}
-                    <a href="{{ product.item.get_absolute_url }}">{{ product.item.get_full_name }}</a>
-                  {% endautoescape %}
-                </div>
-                <div class="price">
-                  {% if product.has_sale %}
-                    <span class="previous-price">{{ product.price_retail }} руб.</span>
-                  {% endif %}
-                <span>{{ product.price }} руб.</span>
-                </div>
-                <div class="buttons-holder">
-                  <div class="add-cart-holder">
-                    {% if product.item.id in cart_positions %}
-                      <a class="md-button add-to-cart-button add-to-cart-button__added" href="{% url 'cart:order' %}" style="">В корзине</a>
-                    {% else %}
-                      <a class="md-button add-to-cart-button js-add-to-cart" data-id="{{ product.item.id }}" href="#">В корзину</a>
-                    {% endif %}
-                  </div>
-{#                  <div class="add-wishlist-holder">#}
-{#                    <a href="#" class="add-to-wishlist uppercase ic-sm-heart">add to wishlist</a>#}
-{#                  </div>#}
-                </div>
-              </div>
-            </div>
-            {% if forloop.last %}
-              </div>
-            {% endif %}
-          {% endfor %}
-          <div class="paging-holder" style="margin-top: 110px;">
-            <ul class="pagination-buttons">
-              {% for page in paginator.get_range %}
-                <li {% if page == paginator.current_page %}class="current"{% endif %}>
-                  <a class="js-page {% if page == paginator.current_page %}js-active{% endif %}" data-page="{{ page }}">{{ page }}</a>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
-        <!--                            List View starts here-->
-        <div id="list-view" class="tab-pane {% if view_list %}active{% endif %}">
-          <div class="products-list-holder">
-            {% for product in products %}
-            <div class="product-list-item">
-              <div class="row">
-                <div class="col-xs-12 col-sm-4">
-                  <div class="image-holder">
-                    <a href="{{ product.item.get_absolute_url }}">
-                      <img alt="" src="{{ product.item.get_212x281_preview }}" width="212" height="281" />
-                    </a>
-                  </div>
-                </div>
-                <div class="col-xs-12 col-sm-8">
-                  <div class="item-details-holder">
-                    <div class="brand">
+        <div class="col-xs-12 col-md-9">
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="sort-dropdown-holder">
+                        <div class="dropdown ">
+                            <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
+                                сортировка <span class="fa fa-angle-down"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <li role="presentation">
+                                    <a class="js-sorting-order {% if ordering_filter == '+' %}category-selected{% endif %}" data-sorting="price" role="menuitem" tabindex="-1" href="#">От <strong>меньшей</strong> к <strong>большей</strong> цене</a>
+                                </li>
+                                <li role="presentation">
+                                    <a class="js-sorting-order {% if ordering_filter == '-' %}category-selected{% endif %}" data-sorting="-price" role="menuitem" tabindex="-1" href="#">От <strong>большой</strong> к <strong>меньшей</strong> цене</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    {% autoescape off %}
-                      <h2 class="title">
-                        <a href="{{ product.item.get_absolute_url }}">{{ product.item.get_full_name }}</a>
-                      </h2>
-                    {% endautoescape %}
-                    <div class="price">
-                      {% if product.has_sale %}
-                        <span class="previous-price">{{ product.price_retail }} руб.</span>
-                      {% endif %}
-                    <span>{{ product.price }} руб.</span>
-                    </div>
-                    <div class="buttons-holder">
-                      <div class="add-cart-holder">
-                        {% if product.item.id in cart_positions %}
-                          <a class="md-button" href="{% url 'cart:order' %}" style="background-color: #e8bf1a; color: #3b3b3b;">В корзине</a>
+                </div>
+            </div>
+            <div class="product-grid no-move-down">
+                <!--                            grid view starts here-->
+                <div id="grid-view" class="tab-pane">
+                    {% for product in products %}
+                    {% if forloop.first %}
+                    <div class="row">
                         {% else %}
-                          <a class="md-button js-add-to-cart" data-id="{{ product.item.id }}" href="#">В корзину</a>
-                        {% endif %}
-                      </div>
-{#                      <div class="add-wishlist-holder">#}
-{#                        <a href="#" class="add-to-wishlist uppercase ic-sm-heart">add to wishlist</a>#}
-{#                      </div>#}
+                        {% if forloop.counter0|divisibleby:"3" %}
                     </div>
-                  </div>
+                    <div class="row">
+                        {% endif %}
+                        {% endif %}
+                        <div class=" col-lg-4 col-xs-12 product-holder">
+                            <div class="product-item text-center">
+                                <div class="image ">
+                                    <a href="{{ product.item.get_absolute_url }}">
+                                        <img alt="" src="{{ product.item.get_212x281_preview }}" width="212" height="281" />
+                                    </a>
+                                </div>
+                                <hr>
+                                <div class="title uppercase bold">
+                                    {% autoescape off %}
+                                    <a href="{{ product.item.get_absolute_url }}">{{ product.item.get_full_name }}</a>
+                                    {% endautoescape %}
+                                </div>
+                                <div class="price">
+                                    {% if product.has_sale %}
+                                    <span class="previous-price">{{ product.price_retail }} руб.</span>
+                                    {% endif %}
+                                    <span>{{ product.price }} руб.</span>
+                                </div>
+                                <div class="buttons-holder">
+                                    <div class="add-cart-holder">
+                                        {% if product.item.id in cart_positions %}
+                                        <a class="md-button" href="{% url 'cart:order' %}" style="background-color: #e8bf1a; color: #3b3b3b;">В корзине</a>
+                                        {% else %}
+                                        <a class="md-button js-add-to-cart" data-id="{{ product.item.id }}" href="#">В корзину</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if forloop.last %}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    <div class="paging-holder" style="margin-top: 110px;">
+                        <ul class="pagination-buttons">
+                            {% for page in paginator.get_range %}
+                            <li {% if page == paginator.current_page %}class="current"{% endif %}>
+                                <a class="js-page {% if page == paginator.current_page %}js-active{% endif %}" data-page="{{ page }}">{{ page }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
-              </div>
+
             </div>
-            {% endfor %}
-          </div>
-          <div class="paging-holder">
-            <ul class="pagination-buttons">
-              {% for page in paginator.get_range %}
-                <li {% if page == paginator.current_page %}class="current"{% endif %}>
-                  <a class="js-page {% if page == paginator.current_page %}js-active{% endif %}" data-page="{{ page }}">{{ page }}</a>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </section>
 {% endblock content %}

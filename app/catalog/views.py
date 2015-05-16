@@ -30,10 +30,6 @@ class CatalogView(View):
 
         return price_column
 
-    def get_price_range(self, request):
-        price_column = self.get_user_price_field(request)
-        return Item.objects.filter(is_deleted=False).aggregate(price_min=Min(price_column), price_max=Max(price_column))
-
     def get(self, request):
         #создаем переданные фильтры
         filters = {}
@@ -80,18 +76,6 @@ class CatalogView(View):
             else:
                 ordering = None
 
-        #фильтруем по цене
-        wide_price = self.get_price_range(request)
-        if 'price_min' in request.GET:
-            price_filter = {
-                'price_min': int(request.GET.get('price_min')),
-                'price_max': int(request.GET.get('price_max')),
-            }
-            filters['{}__gte'.format(self.get_user_price_field(request))] = price_filter['price_min']
-            filters['{}__lte'.format(self.get_user_price_field(request))] = price_filter['price_max']
-        else:
-            price_filter = wide_price
-
         #поиск по артикулу
         article_key = request.GET.get('search', '')
         if article_key:
@@ -126,13 +110,6 @@ class CatalogView(View):
         else:
             cart_positions = []
 
-        #вид сетка или список
-        catalog_view = request.GET.get('view')
-        if catalog_view:
-            view_list = True
-        else:
-            view_list = False
-
         ctx = {
             'item_categories': ItemCategory.objects.all(),
             'item_types': ItemType.objects.all(),
@@ -146,10 +123,7 @@ class CatalogView(View):
             'products': custom_items,
             'paginator': paginator,
             'cart_positions': cart_positions,
-            'prices': wide_price,
-            'price_filter': price_filter,
             'ordering_filter': ordering_filter,
-            'view_list': view_list,
             'search_text': article_key,
         }
 

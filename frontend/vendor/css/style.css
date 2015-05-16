@@ -1,3 +1,5 @@
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
 /*  General classes  */
 a:hover,
 a:focus,
@@ -4504,4 +4506,38 @@ select.quantity {
 
 .single-product-horizontal-gallery .prev-btn {
     left: -15px;
+}
+
+.sidebar .reset-filter {
+    text-decoration: underline;
+    float: right;
+    font-weight: normal;
+}
+
+.sidebar .filter-group {
+    margin: 15px 0;
+}
+
+.sidebar .filter-group-name {
+    text-transform: uppercase;
+    font-family: "Source Sans Pro", sans-serif;
+}
+
+.sidebar .filter-group ul {
+    list-style-type: none;
+}
+
+.sidebar .filter-group ul li {
+    padding-left: 10px;
+}
+
+.sidebar .filter-group ul li a:before {
+    font-family: FontAwesome;
+    display: inline-block;
+    margin-right: 5px;
+    content: "\f096";
+}
+
+.sidebar .filter-group ul li a.category-selected:before {
+    content: "\f046";
 }
