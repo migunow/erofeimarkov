@@ -104,6 +104,25 @@
 
 <!-- vk retargeting -->
 <script type="text/javascript">(window.Image ? (new Image()) : document.createElement('img')).src = location.protocol + '//vk.com/rtrg?r=tzxAN9r3YYT1m7vMYyEACc0mJAygSdomU*GP/i*iq0SKM7A*xZ2Bf94cmFraW7SWJJRzOwkjnKv6kwYZkGPxzbUxIm0TNnKmEXDIUCFXRVOmdcdLlDuuTMBrGFDybvQ*D*LeGOBEsNDEUfJKkVfVJutsuHQZ*T4LUthLzlWx*Jc-';</script>
+
+<!-- CarrotQuest BEGIN -->
+<script type="text/javascript">
+  (function(){ 
+    if (typeof carrotquest === 'undefined') {
+      var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; 
+      s.src = '//cdn.carrotquest.io/api.min.js'; 
+      var x = document.getElementsByTagName('head')[0]; x.appendChild(s);
+      
+      carrotquest = {}; window.carrotquestasync = []; carrotquest.settings = {};
+      m = ['connect', 'track', 'identify', 'auth'];
+      function Build(name, args){return function(){window.carrotquestasync.push(name, arguments);} }
+      for (var i = 0; i < m.length; i++) carrotquest[m[i]] = Build(m[i]);
+    }
+  })();
+  carrotquest.connect('1179-bd1df4c7d3f68cf8d640d1b97a3');
+</script>
+<!-- CarrotQuest END -->
+
 {% endif %}
 </body>
 </html>
