@@ -9,9 +9,9 @@ ehthumbs.db
 Thumbs.db
 
 env/
-media/
-.idea
-erofeimarkov.iml
+/media/
+/.idea
+/erofeimarkov.iml
 db.sqlite3
 *.pyc
 settings.py
