@@ -18,6 +18,7 @@ TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ('www.erofeymarkov.ru', 'www.erofeimarkov.ru', 'erofeimarkov.ru', 'erofeymarkov.ru',)
 
+SITE_ID=1
 
 # Application definition
 
@@ -28,6 +29,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.flatpages',
+    'django.contrib.sites',
     'authentication',
     'catalog',
     'order',
@@ -35,7 +38,10 @@ INSTALLED_APPS = (
     'cart',
     'south',
     'mymigrate',
-    'productfeeds'
+    'productfeeds',
+    'django_markwhat',
+    'blog',
+    'pagedown',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -45,6 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'blog.middleware.FlatpageFallbackMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -75,7 +82,7 @@ USE_TZ = True
 
 #TEMPLATE_LOADERS = ('django.template.loaders.filesystem.Loader',
 #    'django.template.loaders.app_directories.Loader')
-    
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
@@ -103,4 +110,3 @@ AUTH_USER_MODEL = 'authentication.User'
 TASTYPIE_DEFAULT_FORMATS = ['json']
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
-

@@ -5,3 +5,5 @@ django-mymigrate
 psycopg2
 pytils
 unicodecsv
+django-markwhat>=1.4
+django-pagedown>=0.1.0

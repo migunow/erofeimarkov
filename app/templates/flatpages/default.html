@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load markup %}
+
+{% block extra_title %} - {{ flatpage.title }} {% endblock %}
+
+{% block extra_head %}
+  <meta name="keywords" content="erofei markov jewelry, ерофей марков кострома, erofei markov, ювелирный интернет магазин, ювелирные изделия оптом, ювелирный магазин кострома" />
+  <meta name="description" content="Erofei Markov Jewelry: компания по оптовой и розничной продаже ювелирных изделий из золота с полудрагоценными и драгоценными камнями" />
+  <style type="text/css" media="screen">
+    div.content-wrapper img { max-width:700px; }
+    div.content-wrapper {
+    max-width:700px;
+    margin: auto;
+    margin-top: 20px;
+    font-family: "Source Sans Pro", sans-serif;
+    letter-spacing: 1px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #595959;
+    }
+    div.content-wrapper h1 { font-size: 20px;}
+    div.content-wrapper h2 { font-size: 18px;}
+    div.content-wrapper a {
+    line-height: 15px;
+
+    color: #34a992;
+    border-bottom: 1px solid #34a992;
+    }
+
+  </style>
+{% endblock extra_head %}
+
+{% block content %}
+  <div style="max-width:700px; margin: auto;">
+    <h3 style="margin-top: 20px;"><a href="{{ flatpage.url }}">{{ flatpage.title }}</a></h3>
+  </div>
+  <div class="content-holder content-wrapper about-us" style="margin: auto;">
+    <div style="margin-top: 20px;">
+    {{ flatpage.content|markdown:"markdown.extensions.nl2br" }}
+    </div>
+    {% if flatpage.page_type == 1 %}
+    <div> <i>Опубликовано {{ flatpage.pub_date }} </i></div>
+    <hr/>
+    <div class="content-wrapper">
+      <div style="width: 340px; display: inline-block; min-height: 24px;">
+	{% if flatpage.previous_page %}
+          <a href="{{ flatpage.previous_page.url }}" title="{{ flatpage.previous_page.title }}">&lt; Предыдущая</a>
+        {% endif %}
+      </div>
+      <div style="width: 350px; display: inline-block; text-align: right; min-height: 24px;">
+	{% if flatpage.next_page %}
+          <a href="{{ flatpage.next_page.url }}" title="{{ flatpage.next_page.title }}">Следующая &gt;</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  {% if flatpage.page_type == 1 %}
+  <div style="max-width:700px; margin: auto; margin-top: 12px;">
+    <p>Смотрите также:</p>
+    {% for page in flatpage.related_pages %}
+    <p><a style="line-height: 15px; color: #34a992; border-bottom: 1px solid #34a992;" href="{{ page.url }}">{{page.title}}</a></p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+{% endblock content %}

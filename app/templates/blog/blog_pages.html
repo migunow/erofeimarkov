@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load markup %}
+
+{% block extra_title %} - Блог {% endblock %}
+
+{% block extra_head %}
+  <meta name="keywords" content="erofei markov jewelry, ерофей марков кострома, erofei markov, ювелирный интернет магазин, ювелирные изделия оптом, ювелирный магазин кострома" />
+  <meta name="description" content="Erofei Markov Jewelry: компания по оптовой и розничной продаже ювелирных изделий из золота с полудрагоценными и драгоценными камнями" />
+  <style type="text/css" media="screen">
+    #content-wrapper {
+    max-width:700px;
+    margin: auto;
+    margin-top: 20px;
+    font-family: "Source Sans Pro", sans-serif;
+    letter-spacing: 1px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #595959;
+    }
+    #content-wrapper img { max-width:700px; }
+    #content-wrapper h1 { font-size: 20px;}
+    #content-wrapper h2 { font-size: 18px;}
+
+    #content-wrapper a {
+    line-height: 15px;
+
+    color: #34a992;
+    border-bottom: 1px solid #34a992;
+    }
+
+  </style>
+{% endblock extra_head %}
+
+{% block content %}
+  {% for flatpage in posts %}
+  <div style="max-width:700px; margin: auto;">
+    <h3 style="padding-top: 20px;"><a href="{{ flatpage.url }}">{{ flatpage.title }}</a></h3>
+  </div>
+  <div id="content-wrapper" class="content-holder about-us">
+    <div>
+      {{ flatpage.content|markdown:"markdown.extensions.nl2br"|truncatewords_html:80 }}
+    </div>
+    <div>
+      <div style="width: 540px; display: inline-block;"> <i> Опубликовано {{ flatpage.pub_date }} </i></div>
+      <div style="width: 150px; text-align: right; display: inline-block;"><a href={{ flatpage.url }}>Читать далее</a></div>
+    </div>
+    <hr/>
+  </div>
+  {% endfor %}
+  <div id="content-wrapper" class="content-holder about-us">
+    <div style="width: 340px; display: inline-block; min-height: 24px;">
+      {% if posts.has_previous %}
+        <a href="{% url 'all_posts' page=posts.previous_page_number %}">&lt; Предыдущая страница</a>
+      {% endif %}
+    </div>
+    <div style="width: 350px; display: inline-block; text-align: right; min-height: 24px;">
+      {% if posts.has_next %}
+        <a href="{% url 'all_posts' page=posts.next_page_number %}">Следующая страница &gt;</a>
+      {% endif %}
+    </div>
+  </div>
+{% endblock content %}
