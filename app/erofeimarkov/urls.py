@@ -16,7 +16,6 @@ urlpatterns = patterns(
     url(r'^cart/', include('cart.urls', namespace='cart')),
     url(r'^order/', include('order.urls', namespace='order')),
     url(r'^pages/', include('django.contrib.flatpages.urls')),
-    url(r'^sticky-uploads/', include('stickyuploads.urls')),
     url(r'^blog/', include('blog.urls')),
     url(r'', include('pages.urls', namespace='pages')),
 )

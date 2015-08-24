@@ -7,3 +7,4 @@ pytils
 unicodecsv
 django-markwhat>=1.4
 django-pagedown>=0.1.0
+Markdown>=2.6.2

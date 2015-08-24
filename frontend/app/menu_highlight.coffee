@@ -9,5 +9,5 @@ switch location
   when '/catalog/' then mark('catalog')
   when '/delivery/' then mark('delivery')
   when '/about/' then mark('about')
-  when '/news/' then mark('news')
+  when '/blog/' then mark('blog')
   when '/authentication/login/' then mark('login')
