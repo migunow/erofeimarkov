@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import unicodecsv as csv
 from django.http import HttpResponse, HttpResponseNotFound
 from catalog.models import *
+from catalog.utils import CustomPaginator, CustomItem, CustomItemSize
 from xml.dom.minidom import DOMImplementation
 from datetime import datetime
 
@@ -30,7 +31,7 @@ def yamarketFeed(req):
     writer.writerow(['id', 'name', 'available', 'url', 'picture', 'category', 'delivery', 'price', 'currencyId',])
     for item in Item.objects.filter(is_deleted=False):
     	itemname = item.name if item.name else item.type.name
-        itemprice = item.special_price if item.special and item.special_price else item.price_retail
+        itemprice = CustomItem(item, req.user).price()
     	writer.writerow([item.id, itemname, ['false', 'true'][item.balance>0], 'http://erofeimarkov.ru' + item.get_absolute_url(), 'http://erofeimarkov.ru' + item.get_212x281_preview(), u'Подарки и цветы/Ювелирные изделия', 'false', str(itemprice),  u'RUR'])
 
     return response
@@ -39,11 +40,11 @@ def wikimartFeed(req):
     imp = DOMImplementation()
     doctype = imp.createDocumentType(
         qualifiedName='yml_catalog',
-        publicId='', 
+        publicId='',
         systemId='shops.dtd',
     )
     doc = imp.createDocument(None, 'yml_catalog', doctype)
-    
+
     def createTextNode(nodeName, value):
         node = doc.createElement(nodeName)
         node.appendChild(doc.createTextNode(value))
@@ -67,7 +68,7 @@ def wikimartFeed(req):
         el.appendChild(createTextNode("name", "Арт. "+item.article))
         el.appendChild(createTextNode("categoryid", str(item.type.id)))
         el.appendChild(createTextNode("currencyid", "RUR"))
-        return el 
+        return el
 
     top_element = doc.documentElement
     top_element.setAttribute("date", datetime.now().strftime("%Y-%m-%d %H:%M"))
@@ -79,7 +80,7 @@ def wikimartFeed(req):
     erofeimarkovShop.appendChild(createTextNode("url", "http://erofeimarkov.ru/catalog"))
     shops.appendChild(erofeimarkovShop)
     top_element.appendChild(shops)
-    
+
     currencies = doc.createElement("currencies")
     rur = doc.createElement("currency")
     rur.setAttribute("id", "RUR")
