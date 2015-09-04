@@ -151,12 +151,16 @@ class ItemView(View):
                     selected = (rsize == size)
                 else:
                     selected = size in available_sizes
+            if not item.special:
+                price = available_sizes[size].get_price(item) if size in available_sizes else False
+            else:
+                price = item.special_price
 
             raw_size = {
                 "size" : size,
                 "selected" : selected,
                 "available" : size in available_sizes,
-                "price" : CustomItem(item, request.user).price(),
+                "price" : price,
                 "retailprice" : available_sizes[size].item.price_retail if size in available_sizes else False
             }
             if selected:
