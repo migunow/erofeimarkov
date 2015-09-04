@@ -152,7 +152,7 @@ class ItemView(View):
                 else:
                     selected = size in available_sizes
             if not item.special:
-                price = available_sizes[size].get_price(item) if size in available_sizes else False
+                price = available_sizes[size].get_price(available_sizes[size].item) if size in available_sizes else False
             else:
                 price = item.special_price
 
