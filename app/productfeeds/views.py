@@ -3,7 +3,8 @@
 
 from __future__ import unicode_literals
 import unicodecsv as csv
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, StreamingHttpResponse
+from django.views.decorators.http import condition
 from catalog.models import *
 from catalog.utils import CustomPaginator, CustomItem, CustomItemSize
 from xml.dom.minidom import DOMImplementation
@@ -36,122 +37,146 @@ def yamarketFeed(req):
 
     return response
 
-def wikimartFeed(request):
-    imp = DOMImplementation()
-    doctype = imp.createDocumentType(
-        qualifiedName='yml_catalog',
-        publicId='',
-        systemId='shops.dtd',
-    )
-    doc = imp.createDocument(None, 'yml_catalog', doctype)
+def genWikimartFeed(request):
 
     def createTextNode(nodeName, value):
-        node = doc.createElement(nodeName)
-        node.appendChild(doc.createTextNode(value))
-        return node
+        return '<{0}>{1}</{0}>\n'.format(nodeName, value)
 
     def createCategoryElement(category):
-        el = doc.createElement("category")
-        el.setAttribute("id", str(category.id))
-        el.appendChild(doc.createTextNode(category.name))
-        return el
+        return '<category id="{0}">{1}</category>\n'.format(category.id, category.name)
 
     def createParamElement(name, value, unit=None):
-        node = doc.createElement("param")
-        node.setAttribute("name", name)
+        template = u'<param name="{0}"{2}>{1}</param>\n'
         if unit:
-            node.setAttribute("unit", unit)
-        node.appendChild(doc.createTextNode(unicode(value)))
+            unit = u' unit="{0}"'.format(unit)
+        else:
+            unit = u""
+        node = template.format(name, value, unit)
         return node
 
     def createOfferElement(item, size=None, available=None, price=None, retail_price=None):
-        el = doc.createElement("offer")
-        item_id = str(item.id) if size is None else str(item.id) + "s" + str(size).replace(",", "d")
-        el.setAttribute("id", item_id)
-        if available is None:
-            el.setAttribute("available", ['false', 'true'][item.balance>0])
-        else:
-            el.setAttribute("available", available and 'true' or 'false')
-        el.appendChild(createTextNode("url", "http://erofeimarkov.ru" + item.get_absolute_url(size=size)))
-        item_price = str(price or CustomItem(item, request.user).price())
-        el.appendChild(createTextNode("price", item_price))
-        if retail_price and str(retail_price) != item_price:
-            el.appendChild(createTextNode("oldprice", str(retail_price)))
-        if size:
-            el.appendChild(createParamElement("Размер", size))
-        el.appendChild(createParamElement("Вес", item.weight, unit="г"))  # вес в граммах
-        #el.appendChild(createParamElement("Цвет", "желтый"))  # вот это так-то ересь, нужно поправить
+        buffer = []
+
+        buffer.append(createParamElement("Вес", item.weight, unit="г"))  # вес в граммах
+
+        buffer.append("<description>")
         insertions = list(item.iteminsertions.all())
-        description = unicode(item.name if item.name else item.type.name) + " из золота 585 пробы."
+        buffer.append(unicode(item.name if item.name else item.type.name) + " из золота 585 пробы.")
         if len(insertions) == 1:
-            description += " Вставка: "
+            buffer.append(" Вставка: ")
         elif len(insertions):
-            description += " Вставки: "
+            buffer.append(" Вставки: ")
         description_parts = []
         for insertion in insertions:
             description_part = unicode(insertion.kind.name).lower()
             if insertion.count > 1:
                 description_part += " в количестве %d штук" % insertion.count
-            if float(insertion.weight) > 0:
+            if insertion.weight > 0:
                 description_part += " общим весом %s грамм" % insertion.weight
             description_parts.append(description_part)
-        description += ", ".join(description_parts)
+        buffer.append(", ".join(description_parts))
         if len(insertions):
-            description += "."
+            buffer.append(".")
+        buffer.append('</description>\n')
 
-        el.appendChild(createTextNode("description", description))
-        el.appendChild(createParamElement("Материал, проба", "Золото (пр. 585)"))
-        insertions = set([ins.kind.name for ins in item.iteminsertions.all()])
+        buffer.append(createParamElement("Материал, проба", "Золото (пр. 585)"))
 
+        insertions = set([ins.kind.name for ins in insertions])
         for insertion in insertions:
-            el.appendChild(createParamElement("Вставка", insertion))
+            buffer.append(createParamElement("Вставка", insertion))
 
-        el.appendChild(createTextNode("picture", "http://erofeimarkov.ru" + item.get_212x281_preview()))
-        el.appendChild(createTextNode("vendor", "Erofei Markov Jewelry"))
-        el.appendChild(createTextNode("typePrefix", unicode(item.name if item.name else item.type.name)))
-        el.appendChild(createTextNode("name", "Арт. " + item.article))
-        el.appendChild(createTextNode("categoryid", str(item.type.id)))
-        el.appendChild(createTextNode("currencyid", "RUR"))
-        return el
+        buffer.append(createTextNode("picture", "http://erofeimarkov.ru" + item.get_212x281_preview()))
+        buffer.append(createTextNode("vendor", "Erofei Markov Jewelry"))
+        buffer.append(createTextNode("typePrefix", unicode(item.name if item.name else item.type.name)))
+        buffer.append(createTextNode("name", "Арт. " + item.article))
+        buffer.append(createTextNode("categoryid", str(item.type.id)))
+        buffer.append(createTextNode("currencyid", "RUR"))
+        return "".join(buffer)
 
-    top_element = doc.documentElement
-    top_element.setAttribute("date", datetime.now().strftime("%Y-%m-%d %H:%M"))
 
-    shops = doc.createElement('shops')
-    erofeimarkovShop = doc.createElement('shop')
-    erofeimarkovShop.appendChild(createTextNode("name", "Ерофей Марков"))
-    erofeimarkovShop.appendChild(createTextNode("company", "Ювелирная Компания &quot;Ерофей Марков&quot;"))
-    erofeimarkovShop.appendChild(createTextNode("url", "http://erofeimarkov.ru/catalog"))
-    shops.appendChild(erofeimarkovShop)
-    top_element.appendChild(shops)
+    # 1. generate doctype
+    # 2. generate yml tag
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    buffer = []
+    buffer.append('<?xml version="1.0" ?>')
+    buffer.append("<!DOCTYPE yml_catalog SYSTEM 'shops.dtd'>")
+    buffer.append('<yml_catalog date="{0}">\n'.format(timestamp))
+    yield "\n".join(buffer)
 
-    currencies = doc.createElement("currencies")
-    rur = doc.createElement("currency")
-    rur.setAttribute("id", "RUR")
-    rur.setAttribute("rate", "1")
-    currencies.appendChild(rur)
-    top_element.appendChild(currencies)
+    # 3. generate shops tag
+    buffer = []
+    buffer.append("<shops>\n")
+    buffer.append("<shop>\n")
+    buffer.append(createTextNode("name", "Ерофей Марков"))
+    buffer.append(createTextNode("company", "Ювелирная Компания &quot;Ерофей Марков&quot;"))
+    buffer.append(createTextNode("url", "http://erofeimarkov.ru/catalog"))
+    buffer.append("\n</shop>\n")
+    buffer.append("</shops>\n")
 
-    categories = doc.createElement("categories")
+    # 4. generate currencies tag
+    buffer = []
+    buffer.append("<currencies>")
+    buffer.append('<currency id="{0}" rate="{1}"/>'.format("RUR", "1"))
+    buffer.append("</currencies>\n")
+    yield "".join(buffer)
+
+    # 5. create categories element
+    buffer = []
+    buffer.append('<categories>')
     for itemtype in ItemType.objects.filter():
-        categories.appendChild(createCategoryElement(itemtype))
+        buffer.append(createCategoryElement(itemtype))
+    buffer.append('</categories>\n')
+    yield "\n".join(buffer)
 
-    top_element.appendChild(categories)
-
-    offers = doc.createElement("offers")
+    # 6. create offers element
+    yield "<offers>"
     for item in Item.objects.filter(is_deleted=False):
         all_sizes = item.type.get_sizes()
-        available_sizes = dict ((itemsize.size, CustomItemSize(itemsize, request.user)) for itemsize in item.itemsizes_set.all())
+        available_sizes = dict ((itemsize.size, CustomItemSize(itemsize, request.user))
+                                for itemsize in item.itemsizes_set.all())
+        base_offer = createOfferElement(item)
         for size in all_sizes:
+            buffer = []
             available = size in available_sizes
             price = available and available_sizes[size].price() or None
             retail_price = available_sizes[size].item.price_retail if size in available_sizes else None
-            offers.appendChild(
-                createOfferElement(item, size=size, price=price, retail_price=retail_price, available=available))
-        if not all_sizes:
-            offers.appendChild(createOfferElement(item))
+            item_id = str(item.id) if size is None else str(item.id) + "s" + str(size).replace(",", "d")
+            available = available and 'true' or 'false'
 
-    top_element.appendChild(offers)
-    response = HttpResponse(doc.toprettyxml(), content_type="text/xml")
+            buffer.append('<offer id="{0}" available="{1}">\n'.format(item_id, available))
+            buffer.append(base_offer)
+            url = "http://erofeimarkov.ru" + item.get_absolute_url(size=size)
+            buffer.append(createTextNode("url", url))
+            item_price = str(price or CustomItem(item, request.user).price())
+            buffer.append(createTextNode("price", item_price))
+            if retail_price and str(retail_price) != item_price:
+                buffer.append(createTextNode("oldprice", str(retail_price)))
+            if size:
+                buffer.append(createParamElement("Размер", size))
+
+            buffer.append('</offer>\n')
+            yield "".join(buffer)
+        if not all_sizes:
+            available = ['false', 'true'][item.balance>0]
+            url = "http://erofeimarkov.ru" + item.get_absolute_url()
+            item_price = CustomItem(item, request.user).price()
+            retail_price = CustomItem(item, request.user).price_retail()
+            buffer = []
+            buffer.append('<offer id="{0}" available="{1}">\n'.format(item_id, available))
+            buffer.append(base_offer)
+            buffer.append(createTextNode("url", url))
+            buffer.append(createTextNode("price", item_price))
+            if retail_price and str(retail_price) != item_price:
+                buffer.append(createTextNode("oldprice", str(retail_price)))
+            buffer.append('</offer>\n')
+            yield "".join(buffer)
+    yield '</offers>\n'
+    yield '</yml_catalog>'
+
+
+#@condition(etag_func=None)
+def wikimartFeed(request):
+    #response = StreamingHttpResponse(genWikimartFeed(request), content_type="text/xml")
+    response = HttpResponse("".join(genWikimartFeed(request)), content_type="text/xml")
     response['Content-Disposition'] = 'attachment; filename="erofeimarkov_wikimart_feed.xml"'
     return response
