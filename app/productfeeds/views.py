@@ -18,8 +18,8 @@ def googleFeed(req):
     writer = csv.writer(response, delimiter = str('|'))
     writer.writerow(['id', 'title', 'description', 'google_product_category', 'product_type', 'link', 'image_link', 'condition', 'availability', 'price'])
     for item in Item.objects.filter(is_deleted=False):
-    	itemname = item.name if item.name else item.type.name
-    	writer.writerow([item.id, itemname, itemname, 'Apparel & Accessories > Jewelry', item.type.name, 'http://erofeimarkov.ru' + item.get_absolute_url(), 'http://erofeimarkov.ru' + item.get_212x281_preview(), 'new', 'in stock', str(item.price_retail) + u' рублей'])
+        itemname = item.name if item.name else item.type.name
+        writer.writerow([item.id, itemname, itemname, 'Apparel & Accessories > Jewelry', item.type.name, 'http://erofeimarkov.ru' + item.get_absolute_url(), 'http://erofeimarkov.ru' + item.get_212x281_preview(), 'new', 'in stock', str(item.price_retail) + u' рублей'])
 
     return response
 
@@ -30,13 +30,13 @@ def yamarketFeed(req):
     writer = csv.writer(response, delimiter = str(';'))
     writer.writerow(['id', 'name', 'available', 'url', 'picture', 'category', 'delivery', 'price', 'currencyId',])
     for item in Item.objects.filter(is_deleted=False):
-    	itemname = item.name if item.name else item.type.name
+        itemname = item.name if item.name else item.type.name
         itemprice = CustomItem(item, req.user).price()
-    	writer.writerow([item.id, itemname, ['false', 'true'][item.balance>0], 'http://erofeimarkov.ru' + item.get_absolute_url(), 'http://erofeimarkov.ru' + item.get_212x281_preview(), u'Подарки и цветы/Ювелирные изделия', 'false', str(itemprice),  u'RUR'])
+        writer.writerow([item.id, itemname, ['false', 'true'][item.balance>0], 'http://erofeimarkov.ru' + item.get_absolute_url(), 'http://erofeimarkov.ru' + item.get_212x281_preview(), u'Подарки и цветы/Ювелирные изделия', 'false', str(itemprice),  u'RUR'])
 
     return response
 
-def wikimartFeed(req):
+def wikimartFeed(request):
     imp = DOMImplementation()
     doctype = imp.createDocumentType(
         qualifiedName='yml_catalog',
@@ -56,16 +56,41 @@ def wikimartFeed(req):
         el.appendChild(doc.createTextNode(category.name))
         return el
 
-    def createOfferElement(item):
+    def createParamElement(name, value, unit=None):
+        node = doc.createElement("param")
+        node.setAttribute("name", name)
+        if unit:
+            node.setAttribute("unit", unit)
+        node.appendChild(doc.createTextNode(unicode(value)))
+        return node
+
+    def createOfferElement(item, size=None, available=None, price=None, retail_price=None):
         el = doc.createElement("offer")
-        el.setAttribute("id", str(item.id))
-        el.setAttribute("available", ['false', 'true'][item.balance>0])
-        el.appendChild(createTextNode("url", "http://erofeimarkov.ru" + item.get_absolute_url()))
-        el.appendChild(createTextNode("price", str(item.price_retail)))
+        item_id = str(item.id) if size is None else str(item.id) + "s" + str(size).replace(",", "d")
+        el.setAttribute("id", item_id)
+        if available is None:
+            el.setAttribute("available", ['false', 'true'][item.balance>0])
+        else:
+            el.setAttribute("available", available and 'true' or 'false')
+        el.appendChild(createTextNode("url", "http://erofeimarkov.ru" + item.get_absolute_url(size=size)))
+        item_price = str(price or CustomItem(item, request.user).price())
+        el.appendChild(createTextNode("price", item_price))
+        if retail_price and str(retail_price) != item_price:
+            el.appendChild(createTextNode("oldprice", str(retail_price)))
+        if size:
+            el.appendChild(createParamElement("Размер", size))
+        el.appendChild(createParamElement("Вес", item.weight, unit="г"))  # вес в граммах
+        el.appendChild(createParamElement("Цвет", "желтый"))  # вот это так-то ересь, нужно поправить
+        el.appendChild(createParamElement("Материал, проба", "Золото (пр. 585)"))
+        insertions = set([ins.kind.name for ins in item.iteminsertions.all()])
+
+        for insertion in insertions:
+            el.appendChild(createParamElement("Вставка", insertion))
+
         el.appendChild(createTextNode("picture", "http://erofeimarkov.ru" + item.get_212x281_preview()))
         el.appendChild(createTextNode("vendor", "Erofei Markov Jewelry"))
         el.appendChild(createTextNode("typePrefix", unicode(item.name if item.name else item.type.name)))
-        el.appendChild(createTextNode("name", "Арт. "+item.article))
+        el.appendChild(createTextNode("name", "Арт. " + item.article))
         el.appendChild(createTextNode("categoryid", str(item.type.id)))
         el.appendChild(createTextNode("currencyid", "RUR"))
         return el
@@ -94,13 +119,20 @@ def wikimartFeed(req):
 
     top_element.appendChild(categories)
 
-
     offers = doc.createElement("offers")
     for item in Item.objects.filter(is_deleted=False):
-        offers.appendChild(createOfferElement(item))
+        all_sizes = item.type.get_sizes()
+        available_sizes = dict ((itemsize.size, CustomItemSize(itemsize, request.user)) for itemsize in item.itemsizes_set.all())
+        for size in all_sizes:
+            available = size in available_sizes
+            price = available and available_sizes[size].price() or None
+            retail_price = available_sizes[size].item.price_retail if size in available_sizes else None
+            offers.appendChild(
+                createOfferElement(item, size=size, price=price, retail_price=retail_price, available=available))
+        if not all_sizes:
+            offers.appendChild(createOfferElement(item))
 
     top_element.appendChild(offers)
-    # print doc.toprettyxml()
     response = HttpResponse(doc.toprettyxml(), content_type="text/xml")
     response['Content-Disposition'] = 'attachment; filename="erofeimarkov_wikimart_feed.xml"'
     return response

@@ -42,7 +42,7 @@ class ItemType(models.Model):
             return []
         else:
             return self.sizes.split(';')
-    
+
     def get_sizes_serialized(self):
         return json.dumps(self.get_sizes)
 
@@ -102,8 +102,11 @@ class Item(ItemFields):
     def get_full_name(self):
         return '{} <br> <span style="font-size:15px;text-transform: none;">Арт. {}</span>'.format(self.name or self.category.name, self.article)
 
-    def get_absolute_url(self):
-        return reverse('catalog:item', kwargs={'item_id': str(self.id)})
+    def get_absolute_url(self, size=None):
+        url = reverse('catalog:item', kwargs={'item_id': str(self.id)})
+        if size is not None:
+            return "%s?size=%s" % (url, size)
+        return url
 
     def preview(self, width, height):
         dimensions_folder = '{0}x{1}'.format(width, height)

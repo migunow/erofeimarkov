@@ -133,23 +133,34 @@ class CatalogView(View):
 class ItemView(View):
     def get(self, request, item_id):
         item = get_object_or_404(Item, pk=item_id, is_deleted=False)
+
         all_sizes = item.type.get_sizes()
-        
         available_sizes = dict ((itemsize.size, CustomItemSize(itemsize, request.user)) for itemsize in item.itemsizes_set.all())
-        
+
+        rsize = request.GET.get("size", None)
+        if rsize is not None and rsize not in all_sizes:
+            rsize = None
+
         sizes = []
         marked = False
+
         for size in all_sizes:
+            selected = False
+            if not marked:
+                if rsize is not None:
+                    selected = (rsize == size)
+                else:
+                    selected = size in available_sizes
+
             raw_size = {
                 "size" : size,
-                "selected" : not marked and size in available_sizes,
+                "selected" : selected,
                 "available" : size in available_sizes,
-                "price" : (available_sizes[size].get_price(available_sizes[size].item) if size in available_sizes else False) if not item.special else item.special_price,
+                "price" : CustomItem(item, request.user).price(),
                 "retailprice" : available_sizes[size].item.price_retail if size in available_sizes else False
             }
-            if (raw_size["selected"]):
+            if selected:
                 marked = True
-            print raw_size
             sizes.append(raw_size)
 
         #позиции в корзине

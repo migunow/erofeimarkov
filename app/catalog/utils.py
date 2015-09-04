@@ -93,3 +93,14 @@ class CustomItemSize(ItemPriceCalculatorMixin):
     def __init__(self, item, user):
         self.user = user
         self.item = item
+
+    def price(self):
+        item = self.item.item
+        # если изделие акционное
+        if item.special and item.special_price:
+            return item.special_price
+        else:
+            return CustomItem(item, self.user).get_price(self.item)
+
+    def price_retail(self):
+        item = self.item.price_retail
