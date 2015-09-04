@@ -99,7 +99,7 @@ def wikimartFeed(request):
         if len(insertions):
             description += "."
 
-        el.appendChild(createParamElement("Описание", description))
+        el.appendChild(createTextNode("description", description))
         el.appendChild(createParamElement("Материал, проба", "Золото (пр. 585)"))
         insertions = set([ins.kind.name for ins in item.iteminsertions.all()])
 
