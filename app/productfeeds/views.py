@@ -80,7 +80,26 @@ def wikimartFeed(request):
         if size:
             el.appendChild(createParamElement("Размер", size))
         el.appendChild(createParamElement("Вес", item.weight, unit="г"))  # вес в граммах
-        el.appendChild(createParamElement("Цвет", "желтый"))  # вот это так-то ересь, нужно поправить
+        #el.appendChild(createParamElement("Цвет", "желтый"))  # вот это так-то ересь, нужно поправить
+        insertions = list(item.iteminsertions.all())
+        description = unicode(item.name if item.name else item.type.name) + " из золота 585 пробы."
+        if len(insertions) == 1:
+            description += " Вставка: "
+        elif len(insertions):
+            description += " Вставки: "
+        description_parts = []
+        for insertion in insertions:
+            description_part = unicode(insertion.kind.name).lower()
+            if insertion.count > 1:
+                description_part += " в количестве %d штук" % insertion.count
+            if float(insertion.weight) > 0:
+                description_part += " общим весом %s грамм" % insertion.weight
+            description_parts.append(description_part)
+        description += ", ".join(description_parts)
+        if len(insertions):
+            description += "."
+
+        el.appendChild(createParamElement("Описание", description))
         el.appendChild(createParamElement("Материал, проба", "Золото (пр. 585)"))
         insertions = set([ins.kind.name for ins in item.iteminsertions.all()])
 
