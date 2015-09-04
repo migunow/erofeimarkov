@@ -122,14 +122,14 @@ def genWikimartFeed(request):
 
     # 5. create categories element
     buffer = []
-    buffer.append('<categories>')
+    buffer.append('<categories>\n')
     for itemtype in ItemType.objects.filter():
         buffer.append(createCategoryElement(itemtype))
     buffer.append('</categories>\n')
-    yield "\n".join(buffer)
+    yield "".join(buffer)
 
     # 6. create offers element
-    yield "<offers>"
+    yield "<offers>\n"
     for item in Item.objects.filter(is_deleted=False):
         all_sizes = item.type.get_sizes()
         available_sizes = dict ((itemsize.size, CustomItemSize(itemsize, request.user))
