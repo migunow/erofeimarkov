@@ -110,14 +110,11 @@ def genWikimartFeed(request):
     buffer.append(createTextNode("name", "Ерофей Марков"))
     buffer.append(createTextNode("company", "Ювелирная Компания &quot;Ерофей Марков&quot;"))
     buffer.append(createTextNode("url", "http://erofeimarkov.ru/catalog"))
-    buffer.append("\n</shop>\n")
-    buffer.append("</shops>\n")
-
-    # 4. generate currencies tag
-    buffer = []
     buffer.append("<currencies>")
     buffer.append('<currency id="{0}" rate="{1}"/>'.format("RUR", "1"))
     buffer.append("</currencies>\n")
+    buffer.append("\n</shop>\n")
+    buffer.append("</shops>\n")
     yield "".join(buffer)
 
     # 5. create categories element
@@ -130,7 +127,7 @@ def genWikimartFeed(request):
 
     # 6. create offers element
     yield "<offers>\n"
-    for item in Item.objects.filter(is_deleted=False):
+    for item in Item.objects.filter(is_deleted=False).prefetch_related("itemsizes_set"):
         all_sizes = item.type.get_sizes()
         available_sizes = dict ((itemsize.size, CustomItemSize(itemsize, request.user))
                                 for itemsize in item.itemsizes_set.all())
