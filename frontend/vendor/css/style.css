@@ -292,7 +292,7 @@ hr {
 }
 
 .md-button.add-to-cart-button:hover {
-    background-color: #ffcc00;  
+    background-color: #ffcc00;
     color: #3b3b3b;
 }
 
@@ -701,6 +701,12 @@ section {
 .hotline__phone {
     font-size: 18px;
     line-height: 18px;
+}
+
+.hotline__phone_comment {
+    font-size: 8pt;
+    margin-left: 32px;
+    margin-top: -9px;
 }
 
 .top-drop-menu {
