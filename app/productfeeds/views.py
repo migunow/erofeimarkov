@@ -57,9 +57,17 @@ def genWikimartFeed(request):
     def createOfferElement(item, size=None, available=None, price=None, retail_price=None):
         buffer = []
 
-        buffer.append(createParamElement("Вес", item.weight, unit="г"))  # вес в граммах
+        buffer.append(createTextNode("currencyId", "RUR"))
+        buffer.append(createTextNode("categoryId", str(item.type.id)))
+        buffer.append(createTextNode("picture", "http://erofeimarkov.ru" + item.get_212x281_preview()))
+        buffer.append(createTextNode("delivery", "true"))
+        buffer.append(createTextNode("typePrefix", unicode(item.name if item.name else item.type.name)))
+        buffer.append(createTextNode("vendor", "Erofei Markov Jewelry"))
+
+        buffer.append(createTextNode("model", "Арт. " + item.article))
 
         buffer.append("<description>")
+
         insertions = list(item.iteminsertions.all())
         buffer.append(unicode(item.name if item.name else item.type.name) + " из золота 585 пробы.")
         if len(insertions) == 1:
@@ -84,13 +92,9 @@ def genWikimartFeed(request):
         insertions = set([ins.kind.name for ins in insertions])
         for insertion in insertions:
             buffer.append(createParamElement("Вставка", insertion))
+        buffer.append(createParamElement("Вес", item.weight, unit="г"))  # вес в граммах
 
-        buffer.append(createTextNode("picture", "http://erofeimarkov.ru" + item.get_212x281_preview()))
-        buffer.append(createTextNode("vendor", "Erofei Markov Jewelry"))
-        buffer.append(createTextNode("typePrefix", unicode(item.name if item.name else item.type.name)))
-        buffer.append(createTextNode("name", "Арт. " + item.article))
-        buffer.append(createTextNode("categoryid", str(item.type.id)))
-        buffer.append(createTextNode("currencyid", "RUR"))
+
         return "".join(buffer)
 
 
@@ -105,29 +109,28 @@ def genWikimartFeed(request):
 
     # 3. generate shops tag
     buffer = []
-    buffer.append("<shops>\n")
     buffer.append("<shop>\n")
     buffer.append(createTextNode("name", "Ерофей Марков"))
     buffer.append(createTextNode("company", "Ювелирная Компания &quot;Ерофей Марков&quot;"))
     buffer.append(createTextNode("url", "http://erofeimarkov.ru/catalog"))
+
+    # 3.1. create currencies tag
     buffer.append("<currencies>")
     buffer.append('<currency id="{0}" rate="{1}"/>'.format("RUR", "1"))
     buffer.append("</currencies>\n")
-    buffer.append("\n</shop>\n")
-    buffer.append("</shops>\n")
-    yield "".join(buffer)
 
-    # 5. create categories element
-    buffer = []
+    # 3.2. create categories element
     buffer.append('<categories>\n')
     for itemtype in ItemType.objects.filter():
         buffer.append(createCategoryElement(itemtype))
     buffer.append('</categories>\n')
+
     yield "".join(buffer)
+
 
     # 6. create offers element
     yield "<offers>\n"
-    for item in Item.objects.filter(is_deleted=False).prefetch_related("itemsizes_set"):
+    for item in Item.objects.filter(is_deleted=False).prefetch_related("itemsizes_set").prefetch_related("iteminsertions"):
         all_sizes = item.type.get_sizes()
         available_sizes = dict ((itemsize.size, CustomItemSize(itemsize, request.user))
                                 for itemsize in item.itemsizes_set.all())
@@ -140,17 +143,16 @@ def genWikimartFeed(request):
             item_id = str(item.id) if size is None else str(item.id) + "s" + str(size).replace(",", "d")
             available = available and 'true' or 'false'
 
-            buffer.append('<offer id="{0}" available="{1}">\n'.format(item_id, available))
-            buffer.append(base_offer)
+            buffer.append('<offer id="{0}" available="{1}" type="vendor.model">\n'.format(item_id, available))
             url = "http://erofeimarkov.ru" + item.get_absolute_url(size=size)
             buffer.append(createTextNode("url", url))
-            item_price = str(price or CustomItem(item, request.user).price())
+            item_price = str(price or CustomItem(item, request.user).price()).replace(",", ".")
             buffer.append(createTextNode("price", item_price))
-            if retail_price and str(retail_price) != item_price:
-                buffer.append(createTextNode("oldprice", str(retail_price)))
+            #if retail_price and str(retail_price) != item_price:
+            #    buffer.append(createTextNode("oldprice", str(retail_price).replace(",", ".")))
+            buffer.append(base_offer)
             if size:
-                buffer.append(createParamElement("Размер", size))
-
+                buffer.append(createParamElement("Размер", str(size).replace(",", ".")))
             buffer.append('</offer>\n')
             yield "".join(buffer)
         if not all_sizes:
@@ -160,15 +162,18 @@ def genWikimartFeed(request):
             retail_price = CustomItem(item, request.user).price_retail()
             buffer = []
             buffer.append('<offer id="{0}" available="{1}">\n'.format(item_id, available))
-            buffer.append(base_offer)
             buffer.append(createTextNode("url", url))
             buffer.append(createTextNode("price", item_price))
-            if retail_price and str(retail_price) != item_price:
-                buffer.append(createTextNode("oldprice", str(retail_price)))
+            buffer.append(base_offer)
+            #if retail_price and str(retail_price) != item_price:
+            #    buffer.append(createTextNode("oldprice", str(retail_price)))
             buffer.append('</offer>\n')
             yield "".join(buffer)
-    yield '</offers>\n'
-    yield '</yml_catalog>'
+    buffer = []
+    buffer.append('</offers>\n')
+    buffer.append("\n</shop>\n")
+    buffer.append('</yml_catalog>')
+    yield "\n".join(buffer)
 
 
 #@condition(etag_func=None)
