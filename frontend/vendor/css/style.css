@@ -2029,6 +2029,22 @@ header:after {
     margin: 0 -8px;
 }
 
+.footer-column
+.sn-links > div {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.footer-column
+.sn-links .sn-icons {
+    width: 50px;
+}
+.footer-column
+.sn-links .sn-icons img {
+    max-width: 48px;
+    max-height: 48px;
+}
+
 .section-products-grid .nav-tabs li {
     position: relative;
 }

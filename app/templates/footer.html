@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <section class="section-footer">
   <div class="footer-holder">
     <div class="container">
@@ -33,6 +34,24 @@
 		  <a href="{% url 'authentication:registration' %}">Оптовым покупателям</a>
 		</li>
               </ul>
+	      <div>&nbsp;</div>
+	      <div class="sn-links">
+		<div class="sn-icons">
+		  <div style="margin-bottom: 5px;">
+		    <a href="https://vk.com/erofeimarkov">
+		      <img src="{% static 'images/vk.png' %}" alt="Наша страница во Вконтакте"/>
+		    </a>
+		  </div>
+		  <div>
+		    <a href="https://instagram.com/erofeimarkov/">
+		      <img src="{% static 'images/instagram.png' %}" alt="Мы в Instagram"/>
+		    </a>
+		  </div>
+		</div>
+		<div>
+		  <a href="http://clck.yandex.ru/redir/dtype=stred/pid=47/cid=2508/*http://market.yandex.ru/shop/259266/reviews"><img src="http://grade.market.yandex.ru/?id=259266&action=image&size=2" border="0" width="150" height="101" alt="Читайте отзывы покупателей и оценивайте качество магазина на Яндекс.Маркете" style="vertical-align: top;" /></a>
+		</div>
+	      </div>
             </div>
           </div>
         </div>
