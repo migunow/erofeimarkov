@@ -1,13 +1,17 @@
 #coding: utf-8
-from django.shortcuts import render
-from django.views.generic import View
-from cart.cart import CartService, CART_ID
-from order.models import Order
-from notifications.models import *
-from django.core.mail import EmailMessage
-from django.template.loader import render_to_string
-from notifications.smssend import sendsms
+import logging
 
+from django.core.mail import EmailMessage
+from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.views.generic import View
+
+from cart.cart import CartService, CART_ID
+from notifications.notifier import send_notification
+from notifications.smssend import sendsms
+from order.models import Order
+
+logger = logging.getLogger(__name__)
 
 class OrderView(View):
     def get(self, request):
@@ -28,29 +32,15 @@ class OrderView(View):
         cart = CartService(request)
         cart.checkout()
 
-        emails = list(EmailContact.objects.all().values_list('email', flat=True))
-        if emails:
-            html_content = render_to_string('email_templates/ordernotice.html', {
-                "customer": request.user,
-                "comment": order.comment,
-                "orderno": order.id,
-                "orderdt": order.checkout_date,
-                "ordercart": cart,
-            })
+        params = {
+            "phone": unicode(request.POST.get('phone')),
+            "customer": request.user,
+            "comment": order.comment,
+            "orderno": order.id,
+            "orderdt": order.checkout_date,
+            "ordercart": cart,
+        }
 
-            msg = EmailMessage()
-            msg.subject = u"Поступил новый заказ от пользователя " + unicode(request.POST.get('phone'))
-            msg.body = html_content
-            msg.from_email = 'Erofeimarkov.ru <noreply@erofeimarkov.ru>'
-            msg.to = emails
-            msg.content_subtype = "html"
-            sent_count = msg.send()
+        send_notification("order_notice", params)
 
-        phones = ','.join(SMSContact.objects.all().values_list('phoneno', flat=True))
-        if phones:
-            try:
-                message = u'Поступил заказ #' + unicode(order.id) + u' от пользователя '+ unicode(request.POST.get('phone'))
-                sendsms(phones, message)
-            except:
-               print('Could not send sms')
         return render(request, 'cart/after_order.html')
