@@ -1,12 +1,16 @@
 #coding: utf-8
 import logging
+import json
+from datetime import datetime
 
 from django.core.mail import EmailMessage
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.views.generic import View
 
 from cart.cart import CartService, CART_ID
+from cart.models import Cart, Item
 from notifications.notifier import send_notification
 from notifications.smssend import sendsms
 from order.models import Order
@@ -38,9 +42,47 @@ class OrderView(View):
             "comment": order.comment,
             "orderno": order.id,
             "orderdt": order.checkout_date,
+            "orderaddr": order.address,
             "ordercart": cart,
         }
 
         send_notification("order_notice", params)
 
         return render(request, 'cart/after_order.html')
+
+class QuickOrder(View):
+    def post(self, request):
+        cart = Cart()
+        cart.save()
+        item = Item()
+        item.cart = cart
+        item.quantity = int(request.POST.get("quantity", 1))
+        item.product_id = int(request.POST["product_id"])
+        item.save()
+
+        order = Order()
+        order.cart_id = cart.id
+        order.address = "Уточнить у клиента"
+        order.phone = request.POST.get('phone')
+        order.name = request.POST.get('name')
+        order.comment = "Заказ в один клик"
+        if request.user.is_authenticated():
+            order.customer = request.user
+        order.save()
+
+        cart_service = CartService(request, cart)
+
+        params = {
+            "phone": unicode(request.POST.get('phone')),
+            "customer": request.user,
+            "comment": order.comment,
+            "orderno": order.id,
+            "orderdt": order.checkout_date,
+            "orderaddr": order.address,
+            "ordercart": cart_service,
+        }
+
+        send_notification("order_notice", params)
+        response = HttpResponse(json.dumps({"order_id": order.id}),
+                                content_type="application/json")
+        return response

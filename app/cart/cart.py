@@ -47,8 +47,11 @@ class CartItemService(ItemPriceCalculatorMixin):
 
 
 class CartService(object):
-    def __init__(self, request):
+    def __init__(self, request, cart=None):
         self.user = request.user
+        if cart is not None:
+            self.cart = cart
+            return
         cart_id = request.session.get(CART_ID)
         if cart_id:
             try:
@@ -137,5 +140,3 @@ class CartService(object):
         else:
             role = 'Навторизированный пользователь'
         return role
-
-

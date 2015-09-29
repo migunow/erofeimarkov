@@ -4563,3 +4563,11 @@ select.quantity {
 .sidebar .filter-group ul li a.category-selected:before {
     content: "\f046";
 }
+
+.ui-dialog {
+    z-index: 1001 !important;  // hack for strange layout
+}
+
+.dialog-no-close .ui-dialog-titlebar-close {
+  display: none;
+}
