@@ -104,11 +104,17 @@
           <div class="buttons-holder">
             <div class="add-cart-holder inline">
               {% if product.item.id in cart_positions %}
-              <a class="md-button add-to-cart-button add-to-cart-button__added" href="{% url 'cart:order' %}"> В корзине</a>
+              <a class="md-button add-to-cart-button add-to-cart-button__added" style="min-width: 294px;" href="{% url 'cart:order' %}"> В корзине</a>
               {% else %}
-                <a class="md-button add-to-cart-button js-add-to-cart" data-id="{{ product.item.id }}" href="#">В корзину</a>
+                <a class="md-button add-to-cart-button js-add-to-cart" data-id="{{ product.item.id }}" style="min-width: 294px;" href="#">В корзину</a>
               {% endif %}
             </div>
+          <div class="buttons-holder">
+	    <div class="inline add-cart-holder">
+	      <a class="md-button js-buy-one-click" data-id="{{ product.item.id }}" href="#">Заказать в один клик</a>
+	    </div>
+	  </div>
+
 {#            <div class="add-wishlist-holder inline">#}
 {#              <a href="#" class="add-to-wishlist uppercase ic-sm-heart">add to wishlist</a>#}
 {#            </div>#}
@@ -181,7 +187,7 @@
                   <p>
                     Доставку заказов осуществляет курьерская служба СПСР, имеющая сертификат на доставку ювелирных изделий. После сверки паспортных данных и проверки товара вы оплачиваете заказ наличными курьеру.
                   </p>
-                  <p>Также вы можете приобрести товар в нашем офисе по адресу г. Кострома, ул. Стопани, д. 42, оф. 11</p> 
+                  <p>Также вы можете приобрести товар в нашем офисе по адресу г. Кострома, ул. Стопани, д. 42, оф. 11</p>
                 </div>
               </div>
               <div class="tab-pane" id="quality-assurance">

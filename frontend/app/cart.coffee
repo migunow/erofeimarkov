@@ -27,7 +27,6 @@ $('.js-delete-from-cart').on('click', (event)->
 $confirmDialog = $("#oneclick-order-confirmation")
 $confirmDialog.dialog
   autoOpen: false
-  title: "Спасибо. Ваш заказ принят в обработку"
   hide: "fade"
   modal: true
   dialogClass: "dialog-no-close"
@@ -37,22 +36,39 @@ $confirmDialog.dialog
 
 $confirmDialog.on("click", () -> $confirmDialog.dialog("close"))
 
+phoneIsValid = (phone) -> phone.replace(/\D/g, "").length == 11
+
 $dialog = $('#oneclick-order-dialog')
 $dialog.find("input.js-phone").inputmask('+7(999)-999-99-99')
-$dialog.find("button.md-button.large").on("click", (event) ->
+$submitBtn = $dialog.find('#js-oneclick-order-submit')
+
+$submitBtn.on("click", (event) ->
   event.preventDefault()
+  item_id = $dialog.find('input[name="product_id"]').val()
+  $phone = $dialog.find('input[name="phone"]')
+  if (!phoneIsValid($phone.val()))
+    $phone.css("border-color", "#c00")
+    return false;
   data =
     'product_id': $('input[name="product_id"]').val()
     'name': $('input[name="name"]').val()
     'phone': $('input[name="phone"]').val()
-  url = "/order/quick_order/"
+  if item_id
+    url = "/order/quick_order/"
+    $dialog.dialog("option", "title", "Спасибо. Ваш заказ принят в обработку")
+  else
+    url = "/order/callme_back/"
+    $dialog.dialog("option", "title", "Спасибо. Ваш запрос принят")
   $.post(url, data, (response)->
+    if (!response.ok)
+      alert("Что-то пошло не так. Мы уже знаем об этом и делаем всё возможное для решения проблемы.")
+      return
     order_id = response.order_id
     $confirmDialog = $("#oneclick-order-confirmation")
     #$confirmDialog.find("#oneclick-order-id").text(order_id)
     $confirmDialog.dialog("open")
     closeFunc = ()-> $confirmDialog.dialog("close")
-    timeout = setTimeout(closeFunc, 5000)
+    timeout = setTimeout(closeFunc, 3000)
     $confirmDialog.on("close", ()-> clearTimeout(timeout))
   )
   $dialog.dialog("close")
@@ -65,16 +81,24 @@ $dialog.dialog
   resizable: false
   dragable: false
 
-
+$phone = $dialog.find('input[name="phone"]')
 
 $(".js-buy-one-click").on("click", (event) ->
   event.preventDefault()
   $el = $(event.currentTarget)
-  item_id = $el.data("id")
+  item_id = $el.data("id") || ""
   $dialog = $('#oneclick-order-dialog')
   $dialog.find('input[name="product_id"]').val(item_id)
+  if (item_id)
+    window.yaCounter22763440 && window.yaCounter22763440.reachGoal("oneclick-buy-activated")
+    $dialog.dialog("option", "title", "Быстрый заказ")
+  else
+    $dialog.dialog("option", "title", "Обратный звонок")
+
   $dialog.dialog("open")
 )
+
+
 
 $('#js-phone').inputmask('+7(999)-999-99-99')
 

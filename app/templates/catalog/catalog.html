@@ -69,12 +69,7 @@ require('catalog_filters');
                                 </div>
                                 <div class="buttons-holder">
                                     <div class="add-cart-holder">
-                                        {% if product.item.id in cart_positions %}
-                                        <a class="md-button" href="{% url 'cart:order' %}" style="background-color: #e8bf1a; color: #3b3b3b;">В корзине</a>
-                                        {% else %}
-                                        <a class="md-button js-add-to-cart" data-id="{{ product.item.id }}" href="#">В корзину</a>
-					<a class="js-buy-one-click" data-id="{{ product.item.id }}" href="#">Купить в один клик</a>
-                                        {% endif %}
+                                        <a class="md-button js-buy-one-click" data-id="{{ product.item.id }}" href="#">Купить</a>
                                     </div>
                                 </div>
                             </div>
@@ -98,19 +93,4 @@ require('catalog_filters');
         </div>
     </div>
 </section>
-<div style="display: none;">
-  <div id="oneclick-order-dialog">
-    <form action="">
-      <input type="hidden" name="product_id"></input>
-      <div>Ваше имя</div>
-      <div><input type="text" class="md-input" style="width: 100%; margin-bottom: 8px;" name="name" value="{% if request.user.is_authenticated %}{{ request.user.first_name }} {{ request.user.last_name }}{% endif %}"></input></div>
-      <div>Номер телефона</div>
-      <div><input type="text" class="js-phone md-input"  style="width: 100%; margin-bottom: 8px;" name="phone" value="{% if request.user.is_authenticated %}{{ request.user.phone }}{% endif %}"></input></div>
-      <div><button class="md-button large"  style="width: 100%; margin-bottom: 8px;" />Заказать</div>
-    </form>
-  </div>
-  <div id="oneclick-order-confirmation">
-    В ближайшее время с вами свяжется менеджер для уточнения деталей и информации о доставке.
-  </div>
-</div>
 {% endblock content %}

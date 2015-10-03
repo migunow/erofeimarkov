@@ -38,6 +38,7 @@ class OrderView(View):
 
         params = {
             "phone": unicode(request.POST.get('phone')),
+            "name": None,
             "customer": request.user,
             "comment": order.comment,
             "orderno": order.id,
@@ -73,7 +74,8 @@ class QuickOrder(View):
         cart_service = CartService(request, cart)
 
         params = {
-            "phone": unicode(request.POST.get('phone')),
+            "phone": unicode(request.POST["phone"]),
+            "name": unicode(request.POST["name"]),
             "customer": request.user,
             "comment": order.comment,
             "orderno": order.id,
@@ -83,6 +85,34 @@ class QuickOrder(View):
         }
 
         send_notification("order_notice", params)
-        response = HttpResponse(json.dumps({"order_id": order.id}),
+        response = HttpResponse(json.dumps({"order_id": order.id, "ok": 1}),
+                                content_type="application/json")
+        return response
+
+
+class CallMeBack(View):
+    def post(self, request):
+        user = request.user
+        if user.is_authenticated():
+            role = 'Авторизированный пользователь {}'.format(user.id)
+            if user.role == user.ROLE_WHOLESALER:
+                role = 'Наш оптовик {}'.format(user.id)
+        else:
+            role = 'Навторизированный пользователь'
+
+        params = {
+            "phone": unicode(request.POST["phone"]),
+            "name": unicode(request.POST["name"]),
+            "user_role": role,
+            "dt": datetime.now()
+        }
+        try:
+            send_notification("callme_back", params)
+        except Exception as e:
+            logger.error("Cannot send callme_back notification: %s" % str(e))
+            return HttpResponse(json.dumps({"ok": 0}),
+                                content_type="application/json")
+
+        response = HttpResponse(json.dumps({"ok": 1}),
                                 content_type="application/json")
         return response

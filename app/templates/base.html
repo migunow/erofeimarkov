@@ -107,12 +107,12 @@
 
 <!-- CarrotQuest BEGIN -->
 <script type="text/javascript">
-  (function(){ 
+  (function(){
     if (typeof carrotquest === 'undefined') {
-      var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; 
-      s.src = '//cdn.carrotquest.io/api.min.js'; 
+      var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;
+      s.src = '//cdn.carrotquest.io/api.min.js';
       var x = document.getElementsByTagName('head')[0]; x.appendChild(s);
-      
+
       carrotquest = {}; window.carrotquestasync = []; carrotquest.settings = {};
       m = ['connect', 'track', 'identify', 'auth'];
       function Build(name, args){return function(){window.carrotquestasync.push(name, arguments);} }
@@ -124,5 +124,22 @@
 <!-- CarrotQuest END -->
 
 {% endif %}
+
+<div style="display: none;">
+  <div id="oneclick-order-dialog">
+    <form action="">
+      <input type="hidden" name="product_id"></input>
+      <div>Ваше имя</div>
+      <div><input type="text" class="md-input" style="width: 100%; margin-bottom: 8px;" name="name" value="{% if request.user.is_authenticated %}{{ request.user.first_name }} {{ request.user.last_name }}{% endif %}"></input></div>
+      <div>Номер телефона</div>
+      <div><input type="text" class="js-phone md-input"  style="width: 100%; margin-bottom: 8px;" name="phone" value="{% if request.user.is_authenticated %}{{ request.user.phone }}{% endif %}"></input></div>
+      <div><button id="js-oneclick-order-submit" class="md-button large"  style="width: 100%; margin-bottom: 8px;" />Заказать</div>
+    </form>
+  </div>
+  <div id="oneclick-order-confirmation">
+    В ближайшее время с вами свяжется менеджер для уточнения деталей и информации о доставке.
+  </div>
+</div>
+
 </body>
 </html>
