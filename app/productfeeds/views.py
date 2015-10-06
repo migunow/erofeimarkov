@@ -9,6 +9,22 @@ from catalog.models import *
 from catalog.utils import CustomPaginator, CustomItem, CustomItemSize
 from xml.dom.minidom import DOMImplementation
 from datetime import datetime
+import re
+import logging
+
+logger = logging.getLogger(__name__)
+
+DESCRIPTION_RE_FORM = unicode(r"(?P<form>Кр|Круг|Г|Груша|П|Принцесса|М|Маркиз|И|Изумруд|Овал|Квадрат|Багет|Цитрин|Оникс|Пр)(?:[\. \-]+(?:55|56|57|65))?")
+DESCRIPTION_RE_OGR = unicode(r"(?P<ogr>\d/\d{1,2})")
+DESCRIPTION_RE = re.compile(u"(?:%s)?[ ]*%s?" % (DESCRIPTION_RE_FORM, DESCRIPTION_RE_OGR))
+INSERTION_FORMS = {
+    "Кр": "Круг",
+    "Г": "Грушевидный",
+    "П": "Принцесса",
+    "М": "Маркиз",
+    "И": "Изумруд",
+    "Пр": "Прямоугольник"
+}
 
 # Create your views here.
 
@@ -34,6 +50,82 @@ def yamarketFeed(req):
         itemname = item.name if item.name else item.type.name
         itemprice = CustomItem(item, req.user).price()
         writer.writerow([item.id, itemname, ['false', 'true'][item.balance>0], 'http://erofeimarkov.ru' + item.get_absolute_url(), 'http://erofeimarkov.ru' + item.get_212x281_preview(), u'Подарки и цветы/Ювелирные изделия', 'false', str(itemprice),  u'RUR'])
+
+    return response
+
+def brilshopFeed(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="erofeimarkov_brilshop_feed.csv"'
+
+    categories = {}
+    for itemtype in ItemType.objects.all():
+        categories[itemtype.id] = itemtype.name
+
+    def gen_row(item, available, price=None, size=None):
+        insertions_short = []
+        insertions = list(item.iteminsertions.all())
+
+        buffer = []
+        buffer.append(unicode(item.name if item.name else item.type.name) + " из золота 585 пробы.")
+        if len(insertions) == 1:
+            buffer.append(" Вставка: ")
+        elif len(insertions):
+            buffer.append(" Вставки: ")
+        description_parts = []
+        short_desc_parts = []
+        for insertion in insertions:
+            short_desc_re = DESCRIPTION_RE.match(insertion.description.strip())
+            short_desc = []
+            short_desc.append(insertion.kind.name.title())
+            short_desc.append(str(insertion.count))
+            if short_desc_re:
+                ngroups = short_desc_re.groupdict()
+                form = (ngroups.get("form", None) or "").title()
+                if form:
+                    short_desc.append(INSERTION_FORMS.get(form, form))
+                ogr = ngroups.get("ogr", None) or ""
+                if ogr:
+                    short_desc.append(" " + ogr)
+            else:
+                logger.error("Cannot parse description: " + insertion.description)
+                short_desc = ""
+            short_desc_parts.append(" ".join(short_desc))
+
+            description_part = unicode(insertion.kind.name).lower()
+            if insertion.count > 1:
+                description_part += " в количестве %d штук" % insertion.count
+            if insertion.weight > 0:
+                description_part += " общим весом %s грамм" % insertion.weight
+            description_parts.append(description_part)
+        if len(description_parts):
+            buffer.append(", ".join(description_parts))
+            buffer.append(".")
+        description = "".join(buffer)
+        short_description = ",".join(short_desc_parts)
+
+        price = price or CustomItem(item, request.user).price()
+        return [item.article, categories[item.type.id], item.weight,
+                price, ", ".join(insertions_short), "", "Красное", str(size or ""), "585", "", description, available]
+
+    writer = csv.writer(response, delimiter = str(';'))
+    writer.writerow(["Артикул", "Категория", "Вес", "Цена", "Вставки", "Гарнитур", "Цвет",
+                     "Размер", "Проба", "Коллекция", "Описание", "Наличие"])
+    for item in Item.objects.filter(is_deleted=False)\
+                            .prefetch_related("itemsizes_set")\
+                            .prefetch_related("iteminsertions"):
+        all_sizes = item.type.get_sizes()
+
+        price = None
+        if all_sizes:
+            available_sizes = dict ((itemsize.size, CustomItemSize(itemsize, request.user))
+                                    for itemsize in item.itemsizes_set.all())
+            for size in all_sizes:
+                price = item.balance > 0 and size in available_sizes and available_sizes[size].price() or None
+                available = "1" if size in available_sizes else "0"
+                writer.writerow(gen_row(item, available, price, size))
+        else:
+            available = "1" if item.balance>0 else "0"
+            writer.writerow(gen_row(item, available))
 
     return response
 

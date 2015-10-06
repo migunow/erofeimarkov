@@ -6,5 +6,6 @@ urlpatterns = patterns(
     '',
     url(r'^google/$', 'productfeeds.views.googleFeed'),
     url(r'^yamarket/$', 'productfeeds.views.yamarketFeed'),
-    url(r'^wikimart/internal/$', 'productfeeds.views.wikimartFeed'),
+    url(r'^internal/wikimart/$', 'productfeeds.views.wikimartFeed'),
+    url(r'^brilshop/$', 'productfeeds.views.brilshopFeed'),
 )
