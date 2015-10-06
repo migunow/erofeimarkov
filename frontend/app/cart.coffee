@@ -33,6 +33,7 @@ $confirmDialog.dialog
   width: 500
   resizable: false
   dragable: false
+  title: "Спасибо. Ваш запрос принят"
 
 $confirmDialog.on("click", () -> $confirmDialog.dialog("close"))
 
@@ -55,10 +56,10 @@ $submitBtn.on("click", (event) ->
     'phone': $('input[name="phone"]').val()
   if item_id
     url = "/order/quick_order/"
-    $dialog.dialog("option", "title", "Спасибо. Ваш заказ принят в обработку")
+    $confirmDialog.dialog("option", "title", "Спасибо. Ваш заказ принят в обработку")
   else
     url = "/order/callme_back/"
-    $dialog.dialog("option", "title", "Спасибо. Ваш запрос принят")
+    $confirmDialog.dialog("option", "title", "Спасибо. Ваш запрос принят")
   $.post(url, data, (response)->
     if (!response.ok)
       alert("Что-то пошло не так. Мы уже знаем об этом и делаем всё возможное для решения проблемы.")
