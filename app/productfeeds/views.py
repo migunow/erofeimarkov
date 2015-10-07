@@ -77,18 +77,20 @@ def brilshopFeed(request):
             short_desc = []
             short_desc.append(insertion.kind.name.title())
             short_desc.append(str(insertion.count))
+            short_desc.append(str(insertion.weight))
             if short_desc_re:
                 ngroups = short_desc_re.groupdict()
-                form = (ngroups.get("form", None) or "").title()
-                if form:
-                    short_desc.append(INSERTION_FORMS.get(form, form))
                 ogr = ngroups.get("ogr", None) or ""
                 if ogr:
                     short_desc.append(ogr)
+                form = (ngroups.get("form", None) or "").title()
+                if form:
+                    short_desc.append(INSERTION_FORMS.get(form, form))
             else:
                 logger.error("Cannot parse description: " + insertion.description)
-                short_desc = ""
-            short_desc_parts.append(" ".join(short_desc))
+                short_desc = []
+            if short_desc:
+                short_desc_parts.append(" ".join(short_desc))
 
             description_part = unicode(insertion.kind.name).lower()
             if insertion.count > 1:
