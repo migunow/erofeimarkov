@@ -10,6 +10,7 @@ import decimal
 import re
 import datetime
 import zipfile
+import logging
 from django.utils import timezone
 
 from pytils.translit import slugify
@@ -18,6 +19,9 @@ from django.db import transaction, IntegrityError
 from django.conf import settings
 
 from .models import Item, Insertion, InsertionKind, ItemCategory, ItemType, ItemSizes
+
+
+logger = logging.getLogger(__name__)
 
 
 def load_csv(filename):
@@ -113,12 +117,13 @@ def load_csv(filename):
                             fields['count'] = int(fields['count'])
                         except ValueError:
                             fields['count'] = 1
-                            logger.error("Cannot parse insertion count for item %s: %s" % (item.id, fields["count"]))
+                            logger.error("Cannot parse insertion count for item %s: %s" % (item.article, fields["count"]))
                         try:
                             fields['weight'] = decimal.Decimal(fields['weight'])
                         except decimal.InvalidOperation:
                             # print('строка {0}, вставка {1}.нет веса. пропускаю'.format(count, insertion_count))
-                            continue
+                            fields["weight"] = decimal.Decimal(0)
+                            logger.error("Cannot parse insertion weight for %s: %s" % (item.article, fields["weight"]))
 
                         insertion_type = fields['type']
 
