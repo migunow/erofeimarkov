@@ -8,9 +8,10 @@ exports.config =
         '../../app/static/javascripts/vendor.js': /^(?!app)/
       order:
         before: [
-          'bower_components/jquery/dist/jquery.js',
-          'vendor/bootstrap.js',
-          'bower_components/jquery-ui/jquery-ui.js'
+          'bower_components/jquery/dist/jquery.js'
+        ]
+        after: [
+          'vendor/jquery.bootstrap.patch.js'
         ]
 
     stylesheets:
