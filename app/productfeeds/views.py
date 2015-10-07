@@ -84,7 +84,7 @@ def brilshopFeed(request):
                     short_desc.append(INSERTION_FORMS.get(form, form))
                 ogr = ngroups.get("ogr", None) or ""
                 if ogr:
-                    short_desc.append(" " + ogr)
+                    short_desc.append(ogr)
             else:
                 logger.error("Cannot parse description: " + insertion.description)
                 short_desc = ""
