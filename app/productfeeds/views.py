@@ -62,7 +62,6 @@ def brilshopFeed(request):
         categories[itemtype.id] = itemtype.name
 
     def gen_row(item, available, price=None, size=None):
-        insertions_short = []
         insertions = list(item.iteminsertions.all())
 
         buffer = []
@@ -104,8 +103,9 @@ def brilshopFeed(request):
         short_description = ",".join(short_desc_parts)
 
         price = price or CustomItem(item, request.user).price()
-        return [item.article, categories[item.type.id], item.weight,
-                price, ", ".join(insertions_short), "", "Красное", str(size or ""), "585", "", description, available]
+        return [item.article, categories[item.type.id], item.weight, price,
+                short_description, "", "Красное", str(size or ""), "585", "",
+                description, available]
 
     writer = csv.writer(response, delimiter = str(';'))
     writer.writerow(["Артикул", "Категория", "Вес", "Цена", "Вставки", "Гарнитур", "Цвет",
