@@ -107,7 +107,13 @@ def load_csv(filename):
                     for insertion_count, insertion in enumerate(insertions, start=1):
                         raw_fields = insertion.split(',')
                         fields = dict([_field.split(':') for _field in raw_fields])
-                        fields['count'] = int(fields['count'])
+                        if fields["count"] == "":
+                            fields["count"] = 1
+                        try:
+                            fields['count'] = int(fields['count'])
+                        except ValueError:
+                            fields['count'] = 1
+                            logger.error("Cannot parse insertion count for item %s: %s" % (item.id, fields["count"]))
                         try:
                             fields['weight'] = decimal.Decimal(fields['weight'])
                         except decimal.InvalidOperation:
@@ -140,7 +146,7 @@ def load_csv(filename):
     # print(delta)
 
     #еще раз проходимся по файлу, чтобы добавить все размеры, за 1 проход это сделать невозможно
-    
+
     with open(filename, 'rb') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=';'.encode('utf-8'))
 
@@ -212,13 +218,13 @@ def load_csv(filename):
                 # try:
                 item_sizes.save()
 
-                
+
                 total_count[item] = total_count.get(item, 0) + balance
 
             for itemkey in total_count:
                 itemkey.balance = total_count[itemkey]
                 itemkey.save()
-            
+
 
 
 def attach_images(filename):
