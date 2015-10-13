@@ -196,8 +196,8 @@ def genWikimartFeed(request):
     # 2. generate yml tag
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
     buffer = []
-    buffer.append('<?xml version="1.0" ?>')
-    buffer.append("<!DOCTYPE yml_catalog SYSTEM 'shops.dtd'>")
+    buffer.append('<?xml version="1.0" encoding="utf-8"?>')
+    buffer.append('<!DOCTYPE yml_catalog SYSTEM "shops.dtd">')
     buffer.append('<yml_catalog date="{0}">\n'.format(timestamp))
     yield "\n".join(buffer)
 
