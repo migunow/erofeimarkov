@@ -8,4 +8,5 @@ urlpatterns = patterns(
     url(r'^yamarket/$', 'productfeeds.views.yamarketFeed'),
     url(r'^internal/wikimart/$', 'productfeeds.views.wikimartFeed'),
     url(r'^brilshop/$', 'productfeeds.views.brilshopFeed'),
+    url(r'^csv/$', 'productfeeds.views.brilshopFeed'),
 )
