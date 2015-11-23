@@ -4,22 +4,11 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
 
-import os
 
-from django.conf import settings
-from django.core.management.base import BaseCommand, CommandError
+import django
 
-from catalog.load_csv import load_csv, attach_images
-
-
-class Command(BaseCommand):
-    args = ''
-    help = ''
-
-    def handle(self, *args, **options):
-        # filename = os.path.join(settings.BASE_DIR, '..', '..', 'vig2.csv')
-        # load_csv(filename)
-
-        filename = os.path.join(settings.BASE_DIR, '..', '..', 'test_items.zip')
-        attach_images(filename)
-
+# Implementation differs (Django uses argparse since 1.8)
+if django.VERSION[:2] < (1,8):
+    from ._pre18 import Command
+else:
+    from ._post18 import Command
