@@ -1,11 +1,11 @@
 import os
-
-from django.conf import settings
-from django.core.management.base import BaseCommand, CommandError
-
 from optparse import make_option
 
+from django.core.management.base import BaseCommand, CommandError
+
 from catalog.load_csv import load_csv, attach_images
+from notifications.notifier import send_notification
+
 
 class Command(BaseCommand):
     args = ''
@@ -13,13 +13,12 @@ class Command(BaseCommand):
 
     option_list = BaseCommand.option_list + (
         make_option('--load-csv',
-            dest='csv_file',
-            help='CSV file to import'),
+                    dest='csv_file',
+                    help='CSV file to import'),
         make_option('--attach-images',
                     dest="images_archive",
                     help="Updated images archive")
         )
-
 
     def handle(self, *args, **options):
         handled = False
@@ -37,3 +36,9 @@ class Command(BaseCommand):
 
         if not handled:
             raise CommandError("No valid import files specified!")
+        else:
+            params = {
+                "images_archive": images_archive,
+                "csv_file": csv_file,
+            }
+            send_notification("load_items", params)

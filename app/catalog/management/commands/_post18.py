@@ -1,9 +1,10 @@
 import os
 
-from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
 from catalog.load_csv import load_csv, attach_images
+from notifications.notifier import send_notification
+
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
@@ -14,7 +15,6 @@ class Command(BaseCommand):
         parser.add_argument('--attach-images',
                             dest="images_archive",
                             help="Update images from archive")
-
 
     def handle(self, *args, **options):
         handled = False
@@ -32,3 +32,9 @@ class Command(BaseCommand):
 
         if not handled:
             raise CommandError("No valid import files specified!")
+        else:
+            params = {
+                "images_archive": images_archive,
+                "csv_file": csv_file,
+            }
+            send_notification("load_items", params)
