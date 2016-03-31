@@ -90,7 +90,7 @@ class Item(ItemFields):
     is_deleted = models.BooleanField('Удален из каталога',default=False)
     special = models.BooleanField(verbose_name="Акция", default=False)
     special_price = models.PositiveIntegerField(verbose_name="Акционная цена", default=0)
-    description = models.TextField(verbose_name="Описание")
+    description = models.TextField(verbose_name="Описание", default='')
 
     class Meta:
         verbose_name = 'Изделие'
