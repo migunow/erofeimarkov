@@ -20,6 +20,8 @@ WORKDIR /app
 RUN python -m pip install --no-cache-dir -r require.pip
 RUN mv erofeimarkov/settings_prod.py erofeimarkov/settings.py
 
+COPY bin/inotify.py /bin/
+
 RUN apk add nodejs git
 COPY frontend /frontend
 WORKDIR /frontend
@@ -39,7 +41,7 @@ ENV DATABASE_PASSWORD password
 
 WORKDIR /app
 RUN python manage.py collectstatic --noinput
-RUN rm -rf /frontend
+RUN rm -rf /frontend /root/.npm /root/.cache
 
 CMD [ "uwsgi", "--socket", "0.0.0.0:3031", \
                "--uid", "uwsgi", \
