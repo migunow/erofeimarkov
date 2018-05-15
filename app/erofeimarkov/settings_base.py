@@ -18,7 +18,7 @@ TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ('www.erofeymarkov.ru', 'www.erofeimarkov.ru', 'erofeimarkov.ru', 'erofeymarkov.ru',)
 
-SITE_ID=1
+SITE_ID = 1
 
 # Application definition
 

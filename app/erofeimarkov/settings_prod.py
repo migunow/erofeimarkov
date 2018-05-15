@@ -24,4 +24,33 @@ EMAIL_HOST_PASSWORD = os.environ['SMTP_PASSWORD']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-DEBUG = True
+DEBUG = False
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s PID#%(process)d [%(levelname)s] %(name)s: %(message)s at %(pathname)s line %(lineno)d'
+        },
+    },
+    'handlers': {
+        'default': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/uwsgi/django.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['default'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        '': {
+            'handlers': ['default'],
+            'level': 'DEBUG',
+        },
+    },
+}
