@@ -20,7 +20,7 @@ DATABASES = {
 
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_HOST_USER = 'noreply@erofeimarkov.ru'
-EMAIL_HOST_PASSWORD = '434390'
+EMAIL_HOST_PASSWORD = os.environ['SMTP_PASSWORD']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 

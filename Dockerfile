@@ -38,6 +38,7 @@ ENV DATABASE_HOST 127.0.0.1
 ENV DATABASE_NAME postgres
 ENV DATABASE_USERNAME postgres
 ENV DATABASE_PASSWORD password
+ENV SMTP_PASSWORD password
 
 WORKDIR /app
 RUN python manage.py collectstatic --noinput
